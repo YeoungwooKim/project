@@ -19,7 +19,7 @@ public class BoardController {
 	
 	@RequestMapping(value="/board", method=RequestMethod.GET)
 	public ModelAndView openBoardList() throws Exception {
-		ModelAndView mv = new ModelAndView("/board");
+		ModelAndView mv = new ModelAndView("project/board");
 		List<BoardDto> list = boardService.selectBoardList();
 		mv.addObject("list", list);
 		return mv;

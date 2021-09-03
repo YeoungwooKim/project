@@ -25,7 +25,7 @@ public class UserController {
 		mv.setViewName("project/index");
 		return mv;
 	}
-
+ 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public ModelAndView login(@RequestBody UserDto user) throws Exception {
 		ModelAndView mv = new ModelAndView();
