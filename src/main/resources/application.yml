@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    hikari:
+      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+      jdbc-url: jdbc:log4jdbc:mysql://localhost:3306/board?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+      username: root
+      password: youngwo1
+      connection-test-query: SELECT 1
+      
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+       
