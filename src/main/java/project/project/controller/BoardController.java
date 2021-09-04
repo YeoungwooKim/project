@@ -1,27 +1,35 @@
 package project.project.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import project.project.dto.BoardDto;
-import project.project.service.BoardService;
-
-@RestController
+@Controller
+@RequestMapping("/board")
 public class BoardController {
+//	Logger log = LoggerFactory.getLogger(this.getClass());
  
-	@Autowired
-	private BoardService boardService;
+//	@Autowired
+//	private BoardService boardService;
 	
-	@RequestMapping(value="/board", method=RequestMethod.GET)
-	public ModelAndView openBoardList() throws Exception {
-		ModelAndView mv = new ModelAndView("project/board");
-		List<BoardDto> list = boardService.selectBoardList();
-		mv.addObject("list", list);
+//	@GetMapping("/list")
+//	public String list() throws Exception {
+//		return "board/list";
+//	}
+	
+	@GetMapping("/list")
+	public ModelAndView list() throws Exception {
+		ModelAndView mv = new ModelAndView("project/list");
+		mv.addObject("title", "Board");
 		return mv;
 	}
+	
+//	@GetMapping(value="/list")
+//	public ModelAndView openBoardList() throws Exception {
+//		ModelAndView mv = new ModelAndView("project/board");
+//		List<BoardDto> list = boardService.selectBoardList();
+//		mv.addObject("list", list);
+//		return mv;
+//	}
 }

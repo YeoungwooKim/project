@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author"
+	content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+<meta name="generator" content="Jekyll v4.1.1">
+<title th:text="${title}"> </title>
+
+<link rel="canonical"
+	href="https://getbootstrap.com/docs/4.5/examples/starter-template/">
+<link th:href="@{/assets/dist/css/bootstrap.min.css}" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link th:href="@{/css/starter-template.css}" rel="stylesheet">
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"
+		th:fragment="menu">
+		<a class="navbar-brand" href="#">Springboot Tutorial</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarsExampleDefault"
+			aria-controls="navbarsExampleDefault" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item " th:classappend="${title}=='Index'? 'active'">
+					<a class="nav-link" href="/">
+						Home
+						<span class="sr-only" th:if="${title}=='Index'">(current)</span>
+					</a>
+				</li>
+				<li class="nav-item " th:classappend="${title}=='Board'? 'active'">
+					<a class="nav-link" href="/board/list">
+						Board
+						<span class="sr-only" th:if="${title}=='Board'">(current)</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+</body>
+</html>
