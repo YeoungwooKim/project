@@ -8,4 +8,6 @@ public interface BoardService {
 
 	List<BoardDto> selectBoardList() throws Exception;
 
+	void insertBoardList(BoardDto board) throws Exception;
+
 }

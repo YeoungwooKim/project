@@ -8,7 +8,40 @@
 
 	<div class="container">
 		<h2>게시판</h2>
+		<div class="float-right">
+			게시글 총 합계 : <span th:text="${#lists.size(list)}"></span>
+		</div>
+		<div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">idx</th>
+						<th scope="col">title</th>
+						<th scope="col">hit_cnt</th>
+						<th scope="col">creator_id</th>
+						<th scope="col">created_date</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:if="${#lists.size(list)} > 0" th:each="list : ${list}">
+						<th scope="row" th:text="${list.boardIdx}"></th>
+						<td th:text="${list.title}"></td>
+						<td th:text="${list.hitCnt}"></td>
+						<td th:text="${list.creatorId}"></td>
+						<td th:text="${list.createdDate}"></td>
+					</tr>
+					<tr th:unless="${#lists.size(list)} > 0">
+						<th scope="row"></th>
+						<td colspan="4">조회된 결과가 없습니다.</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="text-right">
+				<a class="btn btn-primary" th:href="@{/board/write}">Write</a>
+			</div>
+		</div>
 	</div>
+
 	<!-- /.container -->
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
 		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

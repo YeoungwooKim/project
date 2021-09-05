@@ -17,4 +17,17 @@
 			ORDER BY board_idx DESC
 		]]>
 	</select>
+	<insert id="insertBoardList" parameterType="project.project.dto.BoardDto" useGeneratedKeys="true" keyProperty="boardIdx">
+		<![CDATA[
+			INSERT INTO board
+				(title, contents, created_date, creator_id)
+			VALUES
+				(
+					#{title},
+					#{contents},
+					NOW(),
+					'TESTER'
+				)			
+		]]>	
+	</insert>
 </mapper>
