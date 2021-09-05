@@ -17,6 +17,7 @@
 			ORDER BY board_idx DESC
 		]]>
 	</select>
+	
 	<insert id="insertBoardList" parameterType="project.project.dto.BoardDto" useGeneratedKeys="true" keyProperty="boardIdx">
 		<![CDATA[
 			INSERT INTO board
@@ -30,4 +31,35 @@
 				)			
 		]]>	
 	</insert>
+	
+	<select id="searchBoard" parameterType="int" resultType="project.project.dto.BoardDto">
+		<![CDATA[
+			SELECT
+				board_idx,
+				title,
+				contents,
+				hit_cnt,
+				creator_id,
+				DATE_FORMAT(created_date, '%Y.%m.%d %H:%i:%s') AS created_date,				
+				DATE_FORMAT(updated_date, '%Y.%m.%d %H:%i:%s') AS updated_date
+			FROM
+				board
+			WHERE
+				deleted_yn = 'N'
+				AND
+				board_idx = #{boardIdx}
+			ORDER BY board_idx DESC
+		]]>
+	</select>
+	
+	<update id="modifyBoardList" parameterType="project.project.dto.BoardDto">
+		<![CDATA[
+			UPDATE board SET
+				title = #{title},
+				contents = #{contents},
+				updated_date = NOW()
+			WHERE
+				board_idx = #{boardIdx}
+		]]>
+	</update>
 </mapper>

@@ -24,4 +24,14 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.insertBoardList(board);
 	}
 
+	@Override
+	public BoardDto searchBoard(int boardIdx) throws Exception {
+		return boardMapper.searchBoard(boardIdx);
+	}
+
+	@Override
+	public void modifyBoardList(BoardDto board) throws Exception {
+		boardMapper.modifyBoardList(board);
+	}
+
 }

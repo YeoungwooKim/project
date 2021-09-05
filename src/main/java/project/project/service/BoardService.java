@@ -10,4 +10,8 @@ public interface BoardService {
 
 	void insertBoardList(BoardDto board) throws Exception;
 
+	BoardDto searchBoard(int boardIdx) throws Exception;
+
+	void modifyBoardList(BoardDto board) throws Exception;
+
 }

@@ -7,27 +7,62 @@
 		th:replace="/fragments/common :: menu"></nav>
 
 	<div class="container">
-		<h2>게시글 작성</h2>
+		<div th:if="${board.boardIdx}>0">
+			<h2>게시글 상세</h2>
+		</div>
+		<div th:unless="${board.boardIdx}>0">
+			<h2>게시글 작성</h2>
+		</div>
 		<div>
+			<!-- 
 			<div>
 				<span th:text="${board}"></span>
-			</div>
-			<form method="post" th:action="@{/board/write}" th:object="${board}">
-				<div class="mb-3">
-					<label for="title" class="form-label">
-						title
-					</label> 
-					<input type="text" class="form-control" id="title" th:field="*{title}" placeholder="">
-				</div>
-				<div class="mb-3">
-					<label for="content" class="form-label">
-						contents
-					</label>
-					<textarea class="form-control" id="content"	th:field="*{contents}" rows="3"></textarea>
-				</div>
+			</div>                                       (orderId=${o.id})
+			-->
+				<!-- 작성된거 열람 및 수정하는 경우임 -->
+			<form method="post" th:action="@{/board/write(id=${board.boardIdx})}" th:object="${board}" th:if="${board.boardIdx}>0">
+				<table class="table">
+					<tbody>
+						<tr>
+							<th>writer</th>
+							<td th:text="${board.creatorId}"></td>
+							<th>hitCnt</th>
+							<td th:text="${board.hitCnt}"></td>
+							<th>created date</th>
+							<td th:text="${board.createdDate}"></td>
+						</tr>
+						<tr>
+							<th scope="row">title</th>
+							<td colspan="5"><input type="text" th:value="${board.title}" class="form-control" th:field="*{title}"></td>
+						</tr>
+						<tr>
+							<th scope="row">contents</th>
+							<td colspan="5"><textarea class="form-control" id="content" th:field="*{contents}" rows="8"></textarea></td>
+						</tr>
+					</tbody>
+				</table>
 				<div class="text-right">
 					<a class="btn btn-danger" th:href="@{/board/list}">CANCEL</a>
-					<button type="submit" class="btn btn-primary" >SAVE</button>
+					<button type="submit" class="btn btn-primary">SAVE</button>
+				</div>
+			</form>
+			<!-- 새로 작성하는 경우임 -->
+			<form method="post" th:action="@{/board/write}" th:object="${board}" th:unless="${board.boardIdx}>0">
+				<table class="table">
+					<tbody th:unless="${board.boardIdx}>0">
+						<tr>
+							<th scope="row">title</th>
+							<td><input type="text" class="form-control" id="title" th:field="*{title}" placeholder=""></td>
+						</tr>
+						<tr>
+							<th scope="row">contents</th>
+							<td><textarea class="form-control" id="content" th:field="*{contents}" rows="8"></textarea></td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="text-right">
+					<a class="btn btn-danger" th:href="@{/board/list}">CANCEL</a>
+					<button type="submit" class="btn btn-primary">SAVE</button>
 				</div>
 			</form>
 		</div>

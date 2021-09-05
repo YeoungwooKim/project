@@ -13,7 +13,9 @@ body {
 	-ms-user-select: none;
 	user-select: none;
 }
-
+tbody>tr:hover {
+	background-color: #e0e0e0;
+}
 @media ( min-width : 768px) {
 	.bd-placeholder-img-lg {
 		font-size: 3.5rem;
