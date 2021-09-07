@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="/fragments/common :: head">
 </head>
-<body>
+<body id="body">
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"
 		th:replace="/fragments/common :: menu"></nav>
 
@@ -17,10 +17,10 @@
 			<!-- 
 			<div>
 				<span th:text="${board}"></span>
-			</div>                                       (orderId=${o.id})
+			</div>  
 			-->
+			<form method="post"  onsubmit="finalChk()" th:action="@{/board/write}" th:object="${board}" th:if="${board.boardIdx}>0">
 				<!-- 작성된거 열람 및 수정하는 경우임 -->
-			<form method="post" th:action="@{/board/write(id=${board.boardIdx})}" th:object="${board}" th:if="${board.boardIdx}>0">
 				<table class="table">
 					<tbody>
 						<tr>
@@ -33,36 +33,62 @@
 						</tr>
 						<tr>
 							<th scope="row">title</th>
-							<td colspan="5"><input type="text" th:value="${board.title}" class="form-control" th:field="*{title}"></td>
+							<td colspan="4">
+								<input type="text" class="form-control" th:field="*{title}" id="title">
+								<div class="invalid-feedback">
+							    	한글자 이하거나, 공백만 있는경우 불가
+							    </div>
+							</td>
+							<th> 
+								<div class="input-group mb-3 ">
+								  <span class="input-group-text">Index</span>
+								  <input type="text" class="form-control" th:field="*{boardIdx}"  th:readonly="${1}">
+								</div>
+							</th>
 						</tr>
 						<tr>
 							<th scope="row">contents</th>
-							<td colspan="5"><textarea class="form-control" id="content" th:field="*{contents}" rows="8"></textarea></td>
+							<td colspan="5">
+								<textarea class="form-control" id="contents"  th:field="*{contents}" rows="8"></textarea>
+								<div class="invalid-feedback">
+							    	한글자 이하거나, 공백만 있는경우 불가
+							    </div>
+							</td>
 						</tr>
 					</tbody>
 				</table>
 				<div class="text-right">
 					<a class="btn btn-danger" th:href="@{/board/list}">CANCEL</a>
-					<button type="submit" class="btn btn-primary">SAVE</button>
+					<button type="submit" id="submitBtn" class="btn btn-primary">SAVE</button>
 				</div>
 			</form>
-			<!-- 새로 작성하는 경우임 -->
-			<form method="post" th:action="@{/board/write}" th:object="${board}" th:unless="${board.boardIdx}>0">
+			<form method="post" onsubmit="finalChk()" th:action="@{/board/write}" th:object="${board}" th:unless="${board.boardIdx}>0">
+				<!-- 새로 작성하는 경우임 -->
 				<table class="table">
 					<tbody th:unless="${board.boardIdx}>0">
 						<tr>
 							<th scope="row">title</th>
-							<td><input type="text" class="form-control" id="title" th:field="*{title}" placeholder=""></td>
+							<td>
+								<input type="text" class="form-control" th:field="*{title}" id="title">
+								<div class="invalid-feedback">
+							    	한글자 이하거나, 공백만 있는경우 불가
+							    </div>
+							</td>
 						</tr>
 						<tr>
-							<th scope="row">contents</th>
-							<td><textarea class="form-control" id="content" th:field="*{contents}" rows="8"></textarea></td>
+							<th scope="row">contents</th>							
+							<td colspan="5">
+								<textarea class="form-control" id="contents"  th:field="*{contents}" rows="8"></textarea>
+								<div class="invalid-feedback">
+							    	한글자 이하거나, 공백만 있는경우 불가
+							    </div>
+							</td>
 						</tr>
 					</tbody>
 				</table>
 				<div class="text-right">
 					<a class="btn btn-danger" th:href="@{/board/list}">CANCEL</a>
-					<button type="submit" class="btn btn-primary">SAVE</button>
+					<button type="submit" id="submitBtn" class="btn btn-primary">SAVE</button>
 				</div>
 			</form>
 		</div>
@@ -78,4 +104,56 @@
 						.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')
 	</script>
 	<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		var title = document.getElementById("title");
+		var contents = document.getElementById("contents");
+		var submit = document.getElementById("submitBtn");
+		var body = document.getElementById("body");
+		
+		submit.addEventListener('mouseover', (event) => {
+			if(!valueChk(title.value)){
+				if(!valueChk(contents.value)){
+					submit.disabled = false;
+				}
+			}
+		});
+		
+		body.addEventListener('mouseover', (event) => {
+			if(valueChk(title.value)){
+				title.className = 'form-control is-invalid';
+				submit.disabled = true;
+			} else {
+				title.className = 'form-control';
+			}
+			
+			if(valueChk(contents.value)){
+				contents.className = 'form-control is-invalid';
+				submit.disabled = true;
+			} else {
+				contents.className = 'form-control';
+			}
+			
+			if(!valueChk(title.value) && !valueChk(contents.value)){
+				submit.disabled = false;
+			} 
+		});
+		
+		function valueChk(str){
+			if(str.length < 1 || str.trim() == ''){
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		function finalChk() {
+			if(valueChk(title.value)){
+				window.location.reload(true);
+				alert('title err \n inserted value : "' + title.value+'"'); 
+			} else if(valueChk(contents.value)){
+				window.location.reload(true);
+				alert('contents err \n inserted value : "' + contents.value+'"'); 
+			} 
+		} 
+	</script>
 </html>
