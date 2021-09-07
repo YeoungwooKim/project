@@ -1,6 +1,5 @@
 package project.project.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,17 +8,14 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import project.project.dto.BoardDto;
 import project.project.service.BoardService;
@@ -30,10 +26,10 @@ import project.validator.BoardValidator;
 public class BoardController {
 
 	Logger log = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Autowired
 	private BoardValidator boardValidator;
-	
+
 	@Autowired
 	private BoardService boardService;
 
@@ -60,7 +56,7 @@ public class BoardController {
 
 	@PostMapping("/write")
 	public String save(@Valid BoardDto board, BindingResult bindingResult) throws Exception {
-		//boardValidator.validate(board, bindingResult);
+		// boardValidator.validate(board, bindingResult);
 		if (bindingResult.hasErrors()) {
 			log.debug(bindingResult.getFieldError() + "  dto 어노테이션서 에러 출현");
 			if (board.getBoardIdx() > 0)
@@ -69,12 +65,19 @@ public class BoardController {
 				return "redirect:/board/write";
 		} else {
 			if (board.getBoardIdx() > 0) { // 파라미터값이 존재, 게시글 수정
-				boardService.modifyBoardList(board);
+				boardService.modifyBoardList(board, board.getBoardIdx());
 			} else { // 파라미터값이 존재X, 게시글 생성
 				boardService.insertBoardList(board);
 			}
 			return "redirect:/board/list";
 		}
 	}
-
+	
+	@DeleteMapping("/write")
+	public String delete(@RequestParam int boardIdx) throws Exception {
+		//사용자 본인인지 확인하는 과정 필요함.
+		boardService.delete(boardIdx);
+		return "redirect:/board/list";
+	}
+	
 }

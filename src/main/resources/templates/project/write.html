@@ -14,12 +14,12 @@
 			<h2>게시글 작성</h2>
 		</div>
 		<div>
-			<!-- 
-			<div>
+			
+			<!-- <div>
 				<span th:text="${board}"></span>
-			</div>  
-			-->
-			<form method="post"  onsubmit="finalChk()" th:action="@{/board/write}" th:object="${board}" th:if="${board.boardIdx}>0">
+			</div>   -->
+			
+			<form method="post"  onsubmit="finalChk()" th:action="@{/board/write}" th:object="${board}" th:if="${board.boardIdx}>0" id="form">
 				<!-- 작성된거 열람 및 수정하는 경우임 -->
 				<table class="table">
 					<tbody>
@@ -59,7 +59,11 @@
 				</table>
 				<div class="text-right">
 					<a class="btn btn-danger" th:href="@{/board/list}">CANCEL</a>
+					<button type="button" class="btn btn-danger" onclick="methodChange()">DELETE</button>
 					<button type="submit" id="submitBtn" class="btn btn-primary">SAVE</button>
+				</div>
+				<div id="method">
+					
 				</div>
 			</form>
 			<form method="post" onsubmit="finalChk()" th:action="@{/board/write}" th:object="${board}" th:unless="${board.boardIdx}>0">
@@ -155,5 +159,13 @@
 				alert('contents err \n inserted value : "' + contents.value+'"'); 
 			} 
 		} 
+		
+		function methodChange(){
+			var method = document.getElementById("method");
+			var form = document.getElementById("form");
+			method.innerHTML = '<input type="hidden" name="_method" value="delete"/>';
+			form.submit();
+		}
+		
 	</script>
 </html>

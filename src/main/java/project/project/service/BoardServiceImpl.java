@@ -1,6 +1,9 @@
 package project.project.service;
 
 import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,8 +33,14 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void modifyBoardList(BoardDto board) throws Exception {
-		boardMapper.modifyBoardList(board);
+	public void modifyBoardList(@Valid BoardDto board, int boardIdx) throws Exception {
+		boardMapper.modifyBoardList(board, boardIdx);
 	}
+
+	@Override
+	public void delete(int boardIdx) throws Exception {
+		boardMapper.delete(boardIdx);
+	}
+
 
 }
