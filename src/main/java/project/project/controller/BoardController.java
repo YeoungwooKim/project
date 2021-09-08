@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import io.micrometer.core.instrument.util.StringUtils;
 import project.project.dto.BoardDto;
+import project.project.page.Pagination;
 import project.project.service.BoardService;
 import project.validator.BoardValidator;
 
@@ -33,12 +35,27 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 
+	// @Autowired
+	// private Pagination pagination;
+
 	@GetMapping("/list")
-	public ModelAndView list() throws Exception {
+	public ModelAndView list(@RequestParam(value = "currentPage", required = false) String currentPage)
+			throws Exception {
+		Pagination pagination = new Pagination(boardService.getTotalRecord());
 		ModelAndView mv = new ModelAndView("project/list");
-		List<BoardDto> list = boardService.selectBoardList();
+		int currPage;
+		if (pagination.chkCurrentPage(currentPage)) {
+			currPage = Integer.parseInt(currentPage);
+		} else {
+			currPage = 0;
+		}
+		
+		List<BoardDto> list = boardService.selectBoardList(currPage, pagination.getSize());
+		
+		mv.addObject("pagination", pagination);
 		mv.addObject("list", list);
 		mv.addObject("title", "Board");
+
 		return mv;
 	}
 
@@ -72,12 +89,20 @@ public class BoardController {
 			return "redirect:/board/list";
 		}
 	}
-	
+
 	@DeleteMapping("/write")
 	public String delete(@RequestParam int boardIdx) throws Exception {
-		//사용자 본인인지 확인하는 과정 필요함.
+		// 사용자 본인인지 확인하는 과정 필요함.
 		boardService.delete(boardIdx);
 		return "redirect:/board/list";
 	}
-	
+
+//	@GetMapping("/list")
+//	public ModelAndView list() throws Exception {
+//		ModelAndView mv = new ModelAndView("project/list");
+//		List<BoardDto> list = boardService.selectBoardList();
+//		mv.addObject("list", list);
+//		mv.addObject("title", "Board");
+//		return mv;
+//	}
 }

@@ -4,17 +4,19 @@
 <mapper namespace="project.project.mapper.BoardMapper">
 	<select id="selectBoardList" resultType="project.project.dto.BoardDto">
 		<![CDATA[
-			SELECT
-				board_idx,
-				title,
-				hit_cnt,
-				creator_id,
-				DATE_FORMAT(created_date, '%Y.%m.%d %H:%i:%s') AS created_date
-			FROM
-				board
-			WHERE
-				deleted_yn = 'N'
-			ORDER BY board_idx DESC
+			SELECT 
+				pg.* 
+			FROM ( 
+				SELECT
+					board_idx, 
+					title, 
+					hit_cnt, 
+					creator_id, 
+					DATE_FORMAT(created_date, '%Y.%m.%d %H:%i:%s') AS created_date 
+				FROM board 
+				WHERE 
+					deleted_yn='N' 
+				) pg LIMIT #{size} OFFSET #{currentPage}
 		]]>
 	</select>
 	
@@ -52,7 +54,7 @@
 		]]>
 	</select>
 	
-	 <!-- modifyBoardList(BoardDto board, int intValue) -->
+	 <!-- boardMapper 확인 -->
 	<update id="modifyBoardList">
 		<![CDATA[
 			UPDATE board SET
@@ -72,4 +74,34 @@
 				board_idx=#{boardIdx}
 		]]>
 	</update>
+	
+	<select id="findBoardByTitle" parameterType="String" resultType="project.project.dto.BoardDto">
+		<![CDATA[
+			SELECT
+				board_idx,
+				title,
+				contents,
+				hit_cnt,
+				creator_id,
+				DATE_FORMAT(created_date, '%Y.%m.%d %H:%i:%s') AS created_date,				
+				DATE_FORMAT(updated_date, '%Y.%m.%d %H:%i:%s') AS updated_date
+			FROM
+				board
+			WHERE
+				deleted_yn = 'N'
+				AND
+				title = #{title}
+			ORDER BY board_idx DESC
+		]]>
+	</select>
+	<select id="getTotalRecord" resultType="int">
+		<![CDATA[
+			SELECT COUNT(*)
+			FROM 
+				board
+			WHERE
+				deleted_yn = 'N'
+		]]>
+	</select>
+	
 </mapper>

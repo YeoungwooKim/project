@@ -18,8 +18,8 @@ public class BoardServiceImpl implements BoardService {
 	private BoardMapper boardMapper;
 	
 	@Override
-	public List<BoardDto> selectBoardList() throws Exception {
-		return boardMapper.selectBoardList();
+	public List<BoardDto> selectBoardList(int currentPage, int size) throws Exception {
+		return boardMapper.selectBoardList(currentPage, size);
 	}
 
 	@Override
@@ -42,5 +42,13 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.delete(boardIdx);
 	}
 
+	@Override
+	public List<BoardDto> findBoardByTitle(String title) throws Exception {
+		return boardMapper.findBoardByTitle(title);
+	}
 
+	@Override
+	public int getTotalRecord() throws Exception {
+		return boardMapper.getTotalRecord();
+	}
 }

@@ -12,8 +12,6 @@ import lombok.Data;
 @Data
 public class BoardDto {
 
-	Logger log = LoggerFactory.getLogger(this.getClass());
-
 	@NotNull
 	private int boardIdx;
 
@@ -33,13 +31,4 @@ public class BoardDto {
 
 	private String updatedDate;
 
-	public void printAll() {
-		log.debug("boardIdx : " + boardIdx);
-		log.debug("title : " + title);
-		log.debug("contents : " + contents);
-		log.debug("hitCnt : " + hitCnt);
-		log.debug("createdDate : " + createdDate);
-		log.debug("creatorId : " + creatorId);
-		log.debug("updatedDate : " + updatedDate);
-	}
 }

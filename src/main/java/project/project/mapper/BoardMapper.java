@@ -12,7 +12,7 @@ import project.project.dto.BoardDto;
 
 @Mapper
 public interface BoardMapper {
-	List<BoardDto> selectBoardList() throws Exception;
+	List<BoardDto> selectBoardList(@Param("currentPage") int currentPage, @Param("size") int size) throws Exception;
 
 	void insertBoardList(BoardDto board) throws Exception;
 
@@ -21,4 +21,9 @@ public interface BoardMapper {
 	void modifyBoardList(@Param("board") @Valid BoardDto board, @Param("boardIdx") int boardIdx) throws Exception;
 
 	void delete(@Param("boardIdx") int boardIdx) throws Exception;
+
+	List<BoardDto> findBoardByTitle(String title) throws Exception;
+
+	int getTotalRecord() throws Exception;
+	
 }

@@ -9,7 +9,7 @@ import project.project.dto.BoardDto;
 
 public interface BoardService {
 
-	List<BoardDto> selectBoardList() throws Exception;
+	List<BoardDto> selectBoardList(int currentPage, int size) throws Exception;
 
 	void insertBoardList(BoardDto board) throws Exception;
 
@@ -18,5 +18,10 @@ public interface BoardService {
 	void modifyBoardList(@Valid BoardDto board, int parseInt) throws Exception;
 
 	void delete(int boardIdx) throws Exception;
+
+	List<BoardDto> findBoardByTitle(String title) throws Exception;
+	
+	int getTotalRecord() throws Exception;
+
 
 }
