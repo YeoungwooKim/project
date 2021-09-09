@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class Pagination {
 	private int currentPage;
-	private final int size = 7;
+	private final int size = 6;
 	private int totalPage;
 	private int totalRecord;
 	private boolean hasPreviousPage;

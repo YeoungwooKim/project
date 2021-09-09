@@ -8,8 +8,18 @@
 
 	<div class="container">
 		<h2>게시판</h2>
-		<div class="float-right">
-			게시글 총 합계 : <span th:text="${pagination.getTotalRecord}"></span>
+		<div>
+			<div id="div"> <br> <!-- th:action="" th:method="" -->
+				<form class="row g-3 float-right">
+					<div>
+				    	<input type="text" class="form-control" id="searchTitle" placeholder="Search by title">
+				  	</div>
+				  	<div class="col-auto">
+				    	<button type="submit" class="btn btn-primary mb-3">Search</button>
+				  	</div>
+				</form>
+			</div> <br>
+		  	<div class="float-left" th:text="|게시글 총 합계 : ${pagination.getTotalRecord}|"></div>
 		</div>
 		<div>
 			<table class="table">
@@ -36,40 +46,174 @@
 					</tr>
 				</tbody>
 			</table>
-			<div >
-				<div 
-					th:with="currentPage = ${#httpServletRequest.getParameter('currentPage')}" >
-					<ul class="pagination justify-content-center">
-						<li class="page-item" th:classappend="${pagination.hasPreviousPage} ? '':'disabled'">
-					      <a class="page-link" th:href="@{/board/list(currentPage=0)}" aria-label="Previous">
-					        <span aria-hidden="true">&laquo;</span>
-					      </a>
-					    </li>
-						<li class="page-item" th:classappend="${pagination.hasPreviousPage} ? '':'disabled'">
-							<a class="page-link" th:href="@{/board/list(currentPage=${currentPage}-${pagination.getSize})}">Previous</a>
-						</li>
-						<li class="page-item" th:each="i: ${#numbers.sequence(0, pagination.totalPage-1)}"
-								th:classappend="${currentPage}/${pagination.getSize} == ${i} ? 'active' : '' ">
-							<a class="page-link" th:href="@{/board/list(currentPage=${i}*${pagination.getSize})}" th:text="${i+1}"></a>
-						</li>
-						<li class="page-item" th:classappend="${currentPage} == ${(pagination.totalPage-1)}*${pagination.getSize} ? 'disabled':''">
-							<a class="page-link" th:href="@{/board/list(currentPage=${currentPage}+${pagination.getSize})}">Next</a>
-						</li>
-						<li class="page-item" th:classappend="${currentPage} == ${(pagination.totalPage-1)}*${pagination.getSize} ? 'disabled':''">
-					      <a class="page-link" th:href="@{/board/list(currentPage=${(pagination.totalPage-1)}*${pagination.getSize})}" aria-label="Next">
-					        <span aria-hidden="true">&raquo;</span>
-					      </a>
-					    </li>
-					</ul>
-				</div>
-				<div class="text-right">
+			<ul id="nav4" class="nav justify-content-between bg-light"> 
+				<li class="nav-item">
+					<div class="text-center">
+						<p>
+							<a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+						    	OPTION
+						  	</a>
+						  	<a class="btn btn-primary" data-toggle="collapse" href="#paginationInfo" role="button" aria-expanded="false" aria-controls="paginationInfo">
+						    	INFO
+						  	</a>
+						</p>
+						<div class="collapse" id ="paginationInfo">
+							<div class="card card-body text-left">
+								Page넘기기 방식에 대한 옵션
+							</div>
+						</div>
+						<div class="collapse" id="collapseExample">
+							<div class="card card-body text-left" id="radioPlace">
+								<div class="form-check">
+								  	<input class="form-check-input" type="radio" name="optRadios" id="pgOption1" value="Default" checked>
+								  	<label class="form-check-label" for="optRadios">
+								    	Default
+							  		</label>
+								</div>
+								<div class="form-check">
+								  	<input class="form-check-input" type="radio" name="optRadios" id="pgOption2" value="Range-Bar">
+								  	<label class="form-check-label" for="optRadios">
+								    	Range-Bar
+						  			</label>
+								</div>	
+						  	</div>
+						</div>
+					</div> 
+				</li> 
+				<li class="nav-item" th:with="currentPage = ${#httpServletRequest.getParameter('currentPage')}" > 
+					<div id="defaultOpt" style="display:block">
+						<div>
+							<ul class="pagination justify-content-center">
+								<li class="page-item" th:classappend="${pagination.hasPreviousPage} ? '':'disabled'">
+							      <a class="page-link" th:href="@{/board/list(currentPage=0)}" aria-label="Previous">
+							        <span aria-hidden="true">&laquo;</span>
+							      </a>
+							    </li>
+								<li class="page-item" th:classappend="${pagination.hasPreviousPage} ? '':'disabled'">
+									<a class="page-link" th:href="@{/board/list(currentPage=${currentPage}-${pagination.getSize})}">Previous</a>
+								</li>
+								<li class="page-item" th:each="i: ${#numbers.sequence(0, pagination.totalPage-1)}"
+										th:classappend="${currentPage}/${pagination.getSize} == ${i} ? 'active' : '' ">
+									<a class="page-link" th:href="@{/board/list(currentPage=${i}*${pagination.getSize})}" th:text="${i+1}"></a>
+								</li>
+								<li class="page-item" th:classappend="${currentPage} == ${(pagination.totalPage-1)}*${pagination.getSize} ? 'disabled':''">
+									<a class="page-link" th:href="@{/board/list(currentPage=${currentPage}+${pagination.getSize})}">Next</a>
+								</li>
+								<li class="page-item" th:classappend="${currentPage} == ${(pagination.totalPage-1)}*${pagination.getSize} ? 'disabled':''">
+							      <a class="page-link" th:href="@{/board/list(currentPage=${(pagination.totalPage-1)}*${pagination.getSize})}" aria-label="Next">
+							        <span aria-hidden="true">&raquo;</span>
+							      </a>
+							    </li>
+							</ul>
+						</div>
+					</div>
+					<div id="rangeOpt" style="display:none">
+						<div class="text-center">
+							<label for="rangeVal" th:text="${currentPage}/${pagination.getSize}+1" id="rangeLabel"></label>
+						</div>
+    					<input type="range" class="form-control-range" id="range" th:step="${pagination.getSize}" th:value="${currentPage}" min="0" th:max="${(pagination.totalPage-1)}*${pagination.getSize}" >
+					</div>
+				</li> 
+				<li class="nav-item"> </li> 
+				<li class="nav-item"> 
 					<a class="btn btn-primary " th:href="@{/board/write}">Write</a>
-				</div>
-			</div>
+				</li> 
+			</ul>
 		</div>
 	</div>
 
 	<!-- /.container -->
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script>
+	 	window.onload = function(){
+			if(localStorage.getItem("userInfo") == null){
+				var userInfo = {
+						userId : 'tester', //수정예정 세션 미구현으로 하드코딩 해놓음
+						option : 'Defalut',
+						savedDate : Date()
+				}
+				localStorage.setItem("userInfo", JSON.stringify([userInfo]));
+			} else {
+				var savedData = JSON.parse(localStorage.getItem("userInfo"));
+				for(var idx in savedData){
+					if(savedData[idx].userId == 'tester'){
+						if(savedData[idx].option == "Range-Bar"){ 
+							displayChanger("Range-Bar")
+						}
+					}
+				}
+			}
+		}
+        var origin = document.getElementById("range");
+        var step = document.getElementById("range").step;
+	 	var mouseDown = false;
+	 	
+        $('#range').on({
+            mousedown: function () {
+            	mouseDown = true;
+                origin= $('#rangeLabel').text();
+            },
+            mousemove: function () {
+                if (mouseDown) { 
+                    $('#rangeLabel').empty();
+                    $('#rangeLabel').html(origin+ " &raquo; " + ($('#range').val() / step + 1));
+                }
+            },
+            mouseup: function () {
+    			mouseDown = false;
+                $('#rangeLabel').empty();
+                origin = $('#range').val();
+    			window.location.href= "http://localhost:8080/board/list?currentPage="+origin;
+            }
+        });
+	 	
+		document.getElementById("radioPlace").addEventListener('click', (event) => {
+			const radios = document.querySelectorAll('input[name="optRadios"]');
+	        for (const radio of radios) {
+	            if (radio.checked) {
+	            	paginationSelector(radio.value);
+	                break;
+	            }
+	        }
+		});		
+		
+		function paginationSelector(optName){
+			displayChanger(optName); 
+			changeOpt('tester', optName); //수정예정 세션 미구현으로 하드코딩 해놓음
+		}
+		
+		function displayChanger(optName){
+			var defaultOpt = document.getElementById("defaultOpt");
+			var rangeOpt = document.getElementById("rangeOpt");
+			if(optName === "Default"){ 
+				rangeOpt.style.display = "none";
+				defaultOpt.style.display = "block";
+				document.getElementById("pgOption1").checked = true;
+			} else if(optName === "Range-Bar"){
+				rangeOpt.style.display = "block";
+				defaultOpt.style.display = "none";
+				document.getElementById("pgOption2").checked = true;
+			} else {
+				alert("invalid approach!!");
+				rangeOpt.style.display = "none";
+				defaultOpt.style.display = "block";
+				document.getElementById("pgOption1").checked = true;
+			}
+		}
+		
+		function changeOpt(userId, optName){
+			var savedData = JSON.parse(localStorage.getItem("userInfo"));
+			for(var idx in savedData){
+				if(savedData[idx].userId == userId){
+					savedData[idx].option = (optName == "Default") ? "Default" : "Range-Bar";
+					savedData[idx].savedDate = Date();
+				}
+			}
+			localStorage.setItem("userInfo", JSON.stringify(savedData));
+			//console.log(JSON.parse(localStorage.getItem("userInfo")));
+		}
+		
+	</script>
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
 		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
 		crossorigin="anonymous"></script>
@@ -78,5 +222,6 @@
 				|| document
 						.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')
 	</script>
+	
 	<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
 </html>

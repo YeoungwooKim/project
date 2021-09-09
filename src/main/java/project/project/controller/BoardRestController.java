@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.util.StringUtils;
 
 import project.project.dto.BoardDto;
+import project.project.page.Pagination;
 import project.project.service.BoardService;
 
 @RestController
@@ -27,9 +29,16 @@ class BoardRestController {
 	private BoardService boardService;
 
 	@GetMapping("/doc")
-	List<BoardDto> list(@RequestParam(value = "title", required = false) String title) throws Exception { // 전체 리스트 출력
+	List<BoardDto> list(@RequestParam(value = "title", required = false) String title, @RequestParam(value = "currentPage", required = false) String currentPage) throws Exception { // 전체 리스트 출력
 		if (StringUtils.isEmpty(title)) {
-			return boardService.selectBoardList();
+			Pagination pagination = new Pagination(boardService.getTotalRecord());
+			int currPage;
+			if (pagination.chkCurrentPage(currentPage)) {
+				currPage = Integer.parseInt(currentPage);
+			} else {
+				currPage = 0;
+			}
+			return boardService.selectBoardList(currPage, pagination.getSize());
 		} else {
 			return boardService.findBoardByTitle(title);
 		}
