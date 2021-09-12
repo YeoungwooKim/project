@@ -16,6 +16,7 @@
 				FROM board 
 				WHERE 
 					deleted_yn='N' 
+				ORDER BY created_date
 				) pg LIMIT #{size} OFFSET #{currentPage}
 		]]>
 	</select>
@@ -74,10 +75,8 @@
 				board_idx=#{boardIdx}
 		]]>
 	</update>
-	
-	<select id="findBoardByTitle" parameterType="String" resultType="project.project.dto.BoardDto">
-		<![CDATA[
-			SELECT
+	<select id="findBoardByTitle" resultType="project.project.dto.BoardDto">
+		SELECT
 				board_idx,
 				title,
 				contents,
@@ -90,9 +89,8 @@
 			WHERE
 				deleted_yn = 'N'
 				AND
-				title = #{title}
-			ORDER BY board_idx DESC
-		]]>
+				title LIKE CONCAT('%',#{title},'%')
+			ORDER BY created_date
 	</select>
 	<select id="getTotalRecord" resultType="int">
 		<![CDATA[
@@ -103,5 +101,4 @@
 				deleted_yn = 'N'
 		]]>
 	</select>
-	
 </mapper>

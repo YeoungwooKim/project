@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="head">
 <meta charset="utf-8">
 <meta name="viewport"
@@ -8,7 +9,7 @@
 <meta name="author"
 	content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
 <meta name="generator" content="Jekyll v4.1.1">
-<title th:text="${title}"> </title>
+<title th:text="${title}"></title>
 
 <link rel="canonical"
 	href="https://getbootstrap.com/docs/4.5/examples/starter-template/">
@@ -31,19 +32,37 @@
 		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item " th:classappend="${title}=='Index'? 'active'">
-					<a class="nav-link" href="/">
-						Home
-						<span class="sr-only" th:if="${title}=='Index'">(current)</span>
-					</a>
+					<a class="nav-link" href="/"> Home <span class="sr-only"
+						th:if="${title}=='Index'">(current)</span>
+				</a>
 				</li>
 				<li class="nav-item " th:classappend="${title}=='Board'? 'active'">
-					<a class="nav-link" href="/board/list?currentPage=0">
-						Board
-						<span class="sr-only" th:if="${title}=='Board'">(current)</span>
-					</a>
+					<a class="nav-link" href="/board/list?currentPage=0"> Board <span
+						class="sr-only" th:if="${title}=='Board'">(current)</span>
+				</a>
 				</li>
+
 			</ul>
+			<!-- <div class="text-light"> -->
+
+			<div class="dropdown">
+				<a class="btn btn-secondary btn-lg nav-link dropdown-toggle"
+					id="dropdownMenuButton1" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false">Dropdown</a>
+				<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+					<li><a class="dropdown-item" href="#">Action</a></li>
+					<li><a class="dropdown-item" href="#">Another action</a></li>
+					<li>
+						<hr class="dropdown-divider">
+					</li>
+					<li><a class="dropdown-item" href="#">Something </a></li>
+				</ul>
+			</div>
+			<!-- </div>		 -->
+
 		</div>
+		
 	</nav>
+
 </body>
 </html>

@@ -13,10 +13,10 @@ import project.project.mapper.BoardMapper;
 
 @Service
 public class BoardServiceImpl implements BoardService {
-	
+
 	@Autowired
 	private BoardMapper boardMapper;
-	
+
 	@Override
 	public List<BoardDto> selectBoardList(int currentPage, int size) throws Exception {
 		return boardMapper.selectBoardList(currentPage, size);
@@ -43,12 +43,12 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardDto> findBoardByTitle(String title) throws Exception {
-		return boardMapper.findBoardByTitle(title);
+	public int getTotalRecord() throws Exception {
+		return boardMapper.getTotalRecord();
 	}
 
 	@Override
-	public int getTotalRecord() throws Exception {
-		return boardMapper.getTotalRecord();
+	public List<BoardDto> findBoardByTitle(String title) throws Exception {
+		return boardMapper.findBoardByTitle(title);
 	}
 }

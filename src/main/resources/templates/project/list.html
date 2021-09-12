@@ -9,16 +9,6 @@
 	<div class="container">
 		<h2>게시판</h2>
 		<div>
-			<div id="div"> <br> <!-- th:action="" th:method="" -->
-				<form class="row g-3 float-right">
-					<div>
-				    	<input type="text" class="form-control" id="searchTitle" placeholder="Search by title">
-				  	</div>
-				  	<div class="col-auto">
-				    	<button type="submit" class="btn btn-primary mb-3">Search</button>
-				  	</div>
-				</form>
-			</div> <br>
 		  	<div class="float-left" th:text="|게시글 총 합계 : ${pagination.getTotalRecord}|"></div>
 		</div>
 		<div>
@@ -49,21 +39,10 @@
 			<ul id="nav4" class="nav justify-content-between bg-light"> 
 				<li class="nav-item">
 					<div class="text-center">
-						<p>
-							<a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-						    	OPTION
-						  	</a>
-						  	<a class="btn btn-primary" data-toggle="collapse" href="#paginationInfo" role="button" aria-expanded="false" aria-controls="paginationInfo">
-						    	INFO
-						  	</a>
-						</p>
-						<div class="collapse" id ="paginationInfo">
-							<div class="card card-body text-left">
-								Page넘기기 방식에 대한 옵션
-							</div>
-						</div>
 						<div class="collapse" id="collapseExample">
 							<div class="card card-body text-left" id="radioPlace">
+								Page넘기기 방식에 대한 옵션
+								<hr>
 								<div class="form-check">
 								  	<input class="form-check-input" type="radio" name="optRadios" id="pgOption1" value="Default" checked>
 								  	<label class="form-check-label" for="optRadios">
@@ -75,9 +54,21 @@
 								  	<label class="form-check-label" for="optRadios">
 								    	Range-Bar
 						  			</label>
-								</div>	
+								</div>
+								<div class="form-check">
+								  	<input class="form-check-input" type="radio" name="optRadios" id="pgOption3" value="Simple" checked>
+								  	<label class="form-check-label" for="optRadios">
+								    	Simple
+							  		</label>
+								</div>
 						  	</div>
 						</div>
+						<p>
+							<a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+						    	OPTION
+						  	</a>
+						</p>
+						
 					</div> 
 				</li> 
 				<li class="nav-item" th:with="currentPage = ${#httpServletRequest.getParameter('currentPage')}" > 
@@ -113,6 +104,23 @@
 						</div>
     					<input type="range" class="form-control-range" id="range" th:step="${pagination.getSize}" th:value="${currentPage}" min="0" th:max="${(pagination.totalPage-1)}*${pagination.getSize}" >
 					</div>
+					<div id="simpleOpt" style="display:none">
+						<div th:with="start=(${currentPage}/${pagination.getSize}-1) >= 0 ? ${currentPage}/${pagination.getSize}-1 : 0,
+										 end=(${currentPage}/${pagination.getSize}+1) <= (${pagination.totalPage}-1) ? (${currentPage}/${pagination.getSize}+1) : (${pagination.totalPage}-1)">
+							<ul class="pagination justify-content-center">
+								<li class="page-item" th:classappend="${pagination.hasPreviousPage} ? '':'disabled'">
+									<a class="page-link" th:href="@{/board/list(currentPage=${currentPage}-${pagination.getSize})}">Previous</a>
+								</li>
+							 	<li class="page-item" th:each="i: ${#numbers.sequence(start, end)}" th:classappend="${currentPage}/${pagination.getSize} == ${i} ? 'active' : '' ">
+									<a class="page-link" th:href="@{/board/list(currentPage=${i}*${pagination.getSize})}" th:text="${i+1}"></a>
+								</li>
+								
+								<li class="page-item" th:classappend="${currentPage} == ${(pagination.totalPage-1)}*${pagination.getSize} ? 'disabled':''">
+									<a class="page-link" th:href="@{/board/list(currentPage=${currentPage}+${pagination.getSize})}">Next</a>
+								</li>
+							</ul>
+						</div>
+					</div>
 				</li> 
 				<li class="nav-item"> </li> 
 				<li class="nav-item"> 
@@ -138,7 +146,9 @@
 				for(var idx in savedData){
 					if(savedData[idx].userId == 'tester'){
 						if(savedData[idx].option == "Range-Bar"){ 
-							displayChanger("Range-Bar")
+							displayChanger("Range-Bar");
+						} else if(savedData[idx].option == "Simple"){
+							displayChanger("Simple");
 						}
 					}
 				}
@@ -185,17 +195,28 @@
 		function displayChanger(optName){
 			var defaultOpt = document.getElementById("defaultOpt");
 			var rangeOpt = document.getElementById("rangeOpt");
+			var simpleOpt = document.getElementById("simpleOpt");
+			
+			
 			if(optName === "Default"){ 
 				rangeOpt.style.display = "none";
 				defaultOpt.style.display = "block";
+				simpleOpt.style.display = "none";
 				document.getElementById("pgOption1").checked = true;
 			} else if(optName === "Range-Bar"){
-				rangeOpt.style.display = "block";
 				defaultOpt.style.display = "none";
+				simpleOpt.style.display = "none";
+				rangeOpt.style.display = "block";
 				document.getElementById("pgOption2").checked = true;
+			} else if(optName === "Simple"){
+				rangeOpt.style.display = "none";
+				defaultOpt.style.display = "none";
+				simpleOpt.style.display = "block";
+				document.getElementById("pgOption3").checked = true;
 			} else {
 				alert("invalid approach!!");
 				rangeOpt.style.display = "none";
+				simpleOpt.style.display = "none";
 				defaultOpt.style.display = "block";
 				document.getElementById("pgOption1").checked = true;
 			}
@@ -205,7 +226,7 @@
 			var savedData = JSON.parse(localStorage.getItem("userInfo"));
 			for(var idx in savedData){
 				if(savedData[idx].userId == userId){
-					savedData[idx].option = (optName == "Default") ? "Default" : "Range-Bar";
+					savedData[idx].option = (optName == "Default") ? "Default" : (optName == "Range-Bar") ? "Range-Bar" : "Simple";
 					savedData[idx].savedDate = Date();
 				}
 			}

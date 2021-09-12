@@ -22,8 +22,8 @@ public interface BoardMapper {
 
 	void delete(@Param("boardIdx") int boardIdx) throws Exception;
 
-	List<BoardDto> findBoardByTitle(String title) throws Exception;
-
 	int getTotalRecord() throws Exception;
+
+	List<BoardDto> findBoardByTitle(@Param("title") String title) throws Exception;
 	
 }

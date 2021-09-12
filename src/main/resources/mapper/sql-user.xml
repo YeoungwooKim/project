@@ -14,4 +14,14 @@
 				user_pw = #{userPw}				
 		]]>
 	</select>
+	<insert id="saveUser" parameterType="project.project.dto.UserDto">
+		<![CDATA[
+			INSERT INTO USER 
+				(user_id, user_pw, user_email)
+			VALUES
+				(#{userId}, #{userPw}, #{userEmail})
+			
+		]]>
+	</insert>
+	
 </mapper>

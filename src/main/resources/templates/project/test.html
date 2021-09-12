@@ -1,0 +1,32 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+</head>
+<body>
+	<li class="nav-item">
+    <a class="nav-link" href="#" th:href="@{~/index}"><i class="fa fa-home"></i>Home</a>
+	</li>
+	<li sec:authorize="isAuthenticated()" class="nav-item">
+	    <a class="nav-link" href="#" th:href="@{~/profile/index}">Profile</a>
+	</li>
+	<li sec:authorize="hasRole('admin')" class="nav-item">
+	    <a class="nav-link" href="#" th:href="@{~/admin/index}">Admin</a>
+	</li>
+	<li sec:authorize="hasAnyRole('common')" class="nav-item">
+	    <a class="nav-link" href="#" th:href="@{~/management/index}">common</a>
+	</li>
+	<table>
+    <tr>
+        <td>Username</td>
+        <td><span sec:authentication="name"></span></td>
+    </tr>
+    <tr>
+        <td>Authorities</td>
+        <td><span sec:authentication="principal.authorities"></span></td>
+    </tr>
+</table>
+</body>
+</html>

@@ -19,9 +19,10 @@ public interface BoardService {
 
 	void delete(int boardIdx) throws Exception;
 
-	List<BoardDto> findBoardByTitle(String title) throws Exception;
-	
+
 	int getTotalRecord() throws Exception;
+
+	List<BoardDto> findBoardByTitle(String title) throws Exception;
 
 
 }

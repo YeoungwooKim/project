@@ -6,4 +6,6 @@ public interface UserService {
 
 	Boolean login(UserDto user) throws Exception;
 
+	void saveUser(UserDto user) throws Exception;
+
 }

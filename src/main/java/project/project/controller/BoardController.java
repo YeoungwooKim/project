@@ -9,9 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,14 +36,10 @@ public class BoardController {
 
 	@Autowired
 	private BoardService boardService;
-
-	// @Autowired
-	// private Pagination pagination;
-
+		
 	@GetMapping("/list")
-	public ModelAndView list(@RequestParam(value = "currentPage", required = false) String currentPage)
-			throws Exception {
-		Pagination pagination = new Pagination(boardService.getTotalRecord());
+	public ModelAndView list(@RequestParam(value = "currentPage", required = false) String currentPage) throws Exception {
+		Pagination pagination = new Pagination(boardService.getTotalRecord());;
 		ModelAndView mv = new ModelAndView("project/list");
 		int currPage;
 		if (pagination.chkCurrentPage(currentPage)) {
@@ -49,9 +47,7 @@ public class BoardController {
 		} else {
 			currPage = 0;
 		}
-		
 		List<BoardDto> list = boardService.selectBoardList(currPage, pagination.getSize());
-		
 		mv.addObject("pagination", pagination);
 		mv.addObject("list", list);
 		mv.addObject("title", "Board");

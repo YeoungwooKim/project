@@ -7,4 +7,6 @@ import project.project.dto.UserDto;
 @Mapper
 public interface UserMapper {
 	Boolean login(UserDto user) throws Exception;
+
+	void saveUser(UserDto user) throws Exception;
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+	<meta name="generator" content="Jekyll v4.1.1">
+	<title>Signin Template · Bootstrap</title>
+	
+	<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/sign-in/">
+	
+	<!-- Bootstrap core CSS -->
+	<link th:href="@{/assets/dist/css/bootstrap.min.css}" rel="stylesheet">
+	
+	<!-- Custom styles for this template -->
+	<link th:href="@{/css/signin.css}" rel="stylesheet">
+</head>
+<body class="text-center">
+	<form class="form-signin" th:action="@{/register}" method="post">
+		<img class="mb-4" th:src="@{/assets/brand/bootstrap-solid.svg}" alt="" width="72" height="72">
+		<h1 class="h3 mb-3 font-weight-normal">Register</h1>
+		<!-- <div th:if="${param.error}" class="alert alert-danger" role="alert">
+        	Invalid username and password.
+    	</div> -->
+		<label for="userId" class="sr-only">User ID</label> 
+			<input type="text" id="userId" name="userId" class="form-control" placeholder="User ID" required autofocus>
+		<label for="userEmail" class="sr-only">User Email</label> 
+			<input type="email" id="userEmail" name="userEmail" class="form-control" placeholder="User Email" required> 
+		<label for="userPw" class="sr-only">User Password</label> 
+			<input type="password" id="userPw" name="userPw" class="form-control" placeholder="User Password" required>
+		<button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+		<p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
+	</form>
+	<div>
+		<span th:text="${user}"></span>	
+	</div>
+</body>
+</html>
