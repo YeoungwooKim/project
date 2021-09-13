@@ -8,6 +8,10 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.micrometer.core.instrument.util.StringUtils;
 import project.project.dto.BoardDto;
+import project.project.dto.UserDto;
 import project.project.page.Pagination;
 import project.project.service.BoardService;
 import project.validator.BoardValidator;
@@ -36,10 +41,12 @@ public class BoardController {
 
 	@Autowired
 	private BoardService boardService;
-		
+
 	@GetMapping("/list")
-	public ModelAndView list(@RequestParam(value = "currentPage", required = false) String currentPage) throws Exception {
-		Pagination pagination = new Pagination(boardService.getTotalRecord());;
+	public ModelAndView list(@RequestParam(value = "currentPage", required = false) String currentPage)
+			throws Exception {
+		Pagination pagination = new Pagination(boardService.getTotalRecord());
+		;
 		ModelAndView mv = new ModelAndView("project/list");
 		int currPage;
 		if (pagination.chkCurrentPage(currentPage)) {
@@ -61,6 +68,7 @@ public class BoardController {
 		ModelAndView mv = new ModelAndView("project/write");
 		if (boardIdx != null) { // 파라미터값이 존재, 상세열람
 			mv.addObject("board", boardService.searchBoard(Integer.parseInt(boardIdx)));
+			boardService.addHitCnt(Integer.parseInt(boardIdx));
 		} else { // 파라미터값이 존재 X, 글쓰기
 			mv.addObject("board", new BoardDto());
 		}
@@ -70,6 +78,10 @@ public class BoardController {
 	@PostMapping("/write")
 	public String save(@Valid BoardDto board, BindingResult bindingResult) throws Exception {
 		// boardValidator.validate(board, bindingResult);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+		// log.debug(user.getUsername() + "/" + user.getAuthorities());
+
 		if (bindingResult.hasErrors()) {
 			log.debug(bindingResult.getFieldError() + "  dto 어노테이션서 에러 출현");
 			if (board.getBoardIdx() > 0)
@@ -78,8 +90,13 @@ public class BoardController {
 				return "redirect:/board/write";
 		} else {
 			if (board.getBoardIdx() > 0) { // 파라미터값이 존재, 게시글 수정
-				boardService.modifyBoardList(board, board.getBoardIdx());
+				if (user.getUsername().equals(boardService.findCreator(board.getBoardIdx()))) {
+					boardService.modifyBoardList(board, board.getBoardIdx());
+				} else if (user.getAuthorities().toString().equals("[ROLE_ADMIN]")) {
+					boardService.modifyBoardList(board, board.getBoardIdx());
+				}
 			} else { // 파라미터값이 존재X, 게시글 생성
+				board.setCreatorId(user.getUsername());
 				boardService.insertBoardList(board);
 			}
 			return "redirect:/board/list";
@@ -88,17 +105,13 @@ public class BoardController {
 
 	@DeleteMapping("/write")
 	public String delete(@RequestParam int boardIdx) throws Exception {
-		// 사용자 본인인지 확인하는 과정 필요함.
-		boardService.delete(boardIdx);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+		if (user.getUsername().equals(boardService.findCreator(boardIdx))) {
+			boardService.delete(boardIdx);
+		} else if (user.getAuthorities().toString().equals("[ROLE_ADMIN]")) {
+			boardService.delete(boardIdx);
+		}
 		return "redirect:/board/list";
 	}
-
-//	@GetMapping("/list")
-//	public ModelAndView list() throws Exception {
-//		ModelAndView mv = new ModelAndView("project/list");
-//		List<BoardDto> list = boardService.selectBoardList();
-//		mv.addObject("list", list);
-//		mv.addObject("title", "Board");
-//		return mv;
-//	}
 }

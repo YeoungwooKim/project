@@ -6,18 +6,21 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<li class="nav-item">
-    <a class="nav-link" href="#" th:href="@{~/index}"><i class="fa fa-home"></i>Home</a>
-	</li>
-	<li sec:authorize="isAuthenticated()" class="nav-item">
-	    <a class="nav-link" href="#" th:href="@{~/profile/index}">Profile</a>
-	</li>
-	<li sec:authorize="hasRole('admin')" class="nav-item">
-	    <a class="nav-link" href="#" th:href="@{~/admin/index}">Admin</a>
-	</li>
-	<li sec:authorize="hasAnyRole('common')" class="nav-item">
-	    <a class="nav-link" href="#" th:href="@{~/management/index}">common</a>
-	</li>
+	<ul>
+		<li class="nav-item">
+	    	<a class="nav-link" href="#" th:href="@{~/index}"><i class="fa fa-home"></i>Home</a>
+		</li>
+		<li sec:authorize="isAuthenticated()" class="nav-item">
+		    <a class="nav-link" href="#" th:href="@{~/profile/index}">Profile</a>
+		    <a class="nav-link" href="#" th:href="@{/logout}">logout</a>
+		</li>
+		<li sec:authorize="hasRole('admin')" class="nav-item">
+		    <a class="nav-link" href="#" th:href="@{~/admin/index}">Admin</a>
+		</li>
+		<li sec:authorize="hasAnyRole('common')" class="nav-item">
+		    <a class="nav-link" href="#" th:href="@{~/management/index}">common</a>
+		</li>
+	</ul>
 	<table>
     <tr>
         <td>Username</td>

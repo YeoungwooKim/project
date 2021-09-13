@@ -25,6 +25,7 @@ public class UserServiceImpl implements UserService {
 		user.setUserPw(passwordEncoder.encode(user.getUserPw()));
 		//roles 세팅
 		userMapper.saveUser(user);
+		userMapper.saveRole(user);
 	}
 
 }

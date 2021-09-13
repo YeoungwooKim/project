@@ -51,4 +51,14 @@ public class BoardServiceImpl implements BoardService {
 	public List<BoardDto> findBoardByTitle(String title) throws Exception {
 		return boardMapper.findBoardByTitle(title);
 	}
+
+	@Override
+	public String findCreator(int boardIdx) throws Exception {
+		return boardMapper.findCreator(boardIdx);
+	}
+
+	@Override
+	public void addHitCnt(int boardIdx) throws Exception {
+		boardMapper.addHitCnt(boardIdx);
+	}
 }

@@ -43,19 +43,30 @@
 				</li>
 
 			</ul>
-			<!-- <div class="text-light"> -->
-
+			<div class="text-light">
+				<!-- <span sec:authentication="principal.authorities"></span>
+				<span sec:authentication="name"></span> -->
+				
+			</div>
+			&nbsp;&nbsp;
 			<div class="dropdown">
 				<a class="btn btn-secondary btn-lg nav-link dropdown-toggle"
 					id="dropdownMenuButton1" data-toggle="dropdown"
-					aria-haspopup="true" aria-expanded="false">Dropdown</a>
+					aria-haspopup="true" aria-expanded="false">More Info</a>
 				<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 					<li><a class="dropdown-item" href="#">Action</a></li>
 					<li><a class="dropdown-item" href="#">Another action</a></li>
 					<li>
 						<hr class="dropdown-divider">
 					</li>
-					<li><a class="dropdown-item" href="#">Something </a></li>
+					<li>
+						<a class="dropdown-item" th:href="@{/logout}" sec:authorize="isAuthenticated()">
+							Log-out 
+						</a>
+						<a class="dropdown-item" th:href="@{/login}" sec:authorize="!isAuthenticated()">
+							Log-in 
+						</a>
+					</li>
 				</ul>
 			</div>
 			<!-- </div>		 -->

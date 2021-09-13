@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="/fragments/common :: head">
 </head>
-<body>
+<body th:with="currentPage = (${#httpServletRequest.getParameter('currentPage')} != null) ? ${#httpServletRequest.getParameter('currentPage')} : 0" >
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"
 		th:replace="/fragments/common :: menu"></nav>
 
@@ -71,8 +71,9 @@
 						
 					</div> 
 				</li> 
-				<li class="nav-item" th:with="currentPage = ${#httpServletRequest.getParameter('currentPage')}" > 
+				<li class="nav-item"> 
 					<div id="defaultOpt" style="display:block">
+					<!-- <td th:if="${data!= null}" th:text="${data}"/> -->
 						<div>
 							<ul class="pagination justify-content-center">
 								<li class="page-item" th:classappend="${pagination.hasPreviousPage} ? '':'disabled'">

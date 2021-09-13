@@ -1,8 +1,14 @@
 package project.project.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,13 +25,26 @@ public class UserController {
 	private UserService userService;
 
 	@GetMapping("/test")
-	public ModelAndView test() throws Exception{
+	public ModelAndView test() throws Exception {
 		return new ModelAndView("project/test");
 	}
-	
+
 	@GetMapping("/login")
 	public ModelAndView login() throws Exception {
 		ModelAndView mv = new ModelAndView("project/login");
+		return mv;
+	}
+
+	@GetMapping("/logout")
+	public ModelAndView logout(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		ModelAndView mv = new ModelAndView();
+		if (auth != null) {
+			new SecurityContextLogoutHandler().logout(req, res, auth);
+			mv.setViewName("project/index");
+		} else {
+			mv.setViewName("project/login");
+		}
 		return mv;
 	}
 

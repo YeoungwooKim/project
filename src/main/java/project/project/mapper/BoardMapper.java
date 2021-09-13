@@ -25,5 +25,9 @@ public interface BoardMapper {
 	int getTotalRecord() throws Exception;
 
 	List<BoardDto> findBoardByTitle(@Param("title") String title) throws Exception;
+
+	String findCreator(@Param("boardIdx") int boardIdx) throws Exception;
+
+	void addHitCnt(int boardIdx) throws Exception;
 	
 }

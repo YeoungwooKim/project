@@ -23,5 +23,10 @@
 			
 		]]>
 	</insert>
-	
+	<insert id="saveRole" parameterType="project.project.dto.UserDto">
+		<![CDATA[
+			INSERT INTO ROLE
+			VALUES (#{userId}, 'ROLE_USER');
+		]]>
+	</insert>
 </mapper>

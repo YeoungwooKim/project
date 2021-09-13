@@ -16,11 +16,11 @@
 				FROM board 
 				WHERE 
 					deleted_yn='N' 
-				ORDER BY created_date
+				ORDER BY board_idx DESC
 				) pg LIMIT #{size} OFFSET #{currentPage}
 		]]>
 	</select>
-	
+
 	<insert id="insertBoardList" parameterType="project.project.dto.BoardDto" useGeneratedKeys="true" keyProperty="boardIdx">
 		<![CDATA[
 			INSERT INTO board
@@ -30,7 +30,7 @@
 					#{title},
 					#{contents},
 					NOW(),
-					'TESTER'
+					#{creatorId}
 				)			
 		]]>	
 	</insert>
@@ -90,7 +90,7 @@
 				deleted_yn = 'N'
 				AND
 				title LIKE CONCAT('%',#{title},'%')
-			ORDER BY created_date
+			ORDER BY board_idx DESC
 	</select>
 	<select id="getTotalRecord" resultType="int">
 		<![CDATA[
@@ -101,4 +101,24 @@
 				deleted_yn = 'N'
 		]]>
 	</select>
+	
+	<select id="findCreator" resultType="string">
+		<![CDATA[
+			SELECT 
+				creator_id
+			FROM
+				board
+			WHERE
+				board_idx = #{boardIdx}
+		]]>
+	</select>
+	<update id="addHitCnt">
+		<![CDATA[
+			UPDATE board
+				set hit_cnt = hit_cnt + 1
+			WHERE
+				board_idx=#{boardIdx}
+		]]>
+	</update>
+	
 </mapper>
