@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="project.project.mapper.UserMapper">
-	<select id="login" parameterType="project.project.dto.UserDto" resultType="boolean">
-		<![CDATA[
-			SELECT
-				TRUE
-			FROM
-				user
-			WHERE
-				user_id = #{userId}				
-				AND
-				user_pw = #{userPw}				
-		]]>
-	</select>
+<mapper namespace="project.project.mapper.UserMapper"> 
 	<insert id="saveUser" parameterType="project.project.dto.UserDto">
 		<![CDATA[
 			INSERT INTO USER 
@@ -26,7 +14,77 @@
 	<insert id="saveRole" parameterType="project.project.dto.UserDto">
 		<![CDATA[
 			INSERT INTO ROLE
-			VALUES (#{userId}, 'ROLE_USER');
+			VALUES (#{userId}, 'ROLE_USER')
 		]]>
 	</insert>
+	<select id="searchEmail" resultType="string">
+	 	<![CDATA[
+	 		SELECT 
+	 			user_email
+	 		FROM
+	 			user
+	 		WHERE
+	 			user_id = #{username}
+	 	]]>
+	</select>
+	
+	<update id="editInfo">
+		UPDATE 
+			user
+		SET 
+			user_email = #{user.userEmail},
+			user_pw = #{user.userPw}
+		WHERE
+			user_id = #{username}
+	</update>
+	<update id="editEmail">
+		UPDATE 
+			user
+		SET 
+			user_email = #{userEmail}
+		WHERE
+			user_id = #{username}
+	</update>
+	<select id="searchMailBox" resultType="project.project.dto.MessageDto">
+		SELECT 
+			msg.*
+		FROM (
+				SELECT
+					sender, recipient, title, content, post_date
+				FROM
+					message
+				WHERE
+					recipient = #{username}
+				ORDER BY post_date DESC
+			 ) msg LIMIT #{cnt}
+	</select>
+	<select id="getMsgCount" resultType="int">
+		SELECT
+			count(*) 
+		FROM (
+			SELECT
+				sender, recipient, title, content, post_date
+			FROM
+				message 
+			WHERE 
+				recipient = #{username}
+				) msg;
+	</select>
+	<select id="findMyBoard" resultType="project.project.dto.BoardDto">
+		SELECT
+				board_idx,
+				title,
+				contents,
+				hit_cnt,
+				creator_id,
+				DATE_FORMAT(created_date, '%Y.%m.%d %H:%i:%s') AS created_date,				
+				DATE_FORMAT(updated_date, '%Y.%m.%d %H:%i:%s') AS updated_date
+			FROM
+				board
+			WHERE
+				deleted_yn = 'N'
+				AND
+				creator_id = #{username}
+			ORDER BY board_idx DESC
+	</select>
 </mapper>

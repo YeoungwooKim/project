@@ -27,4 +27,6 @@ public interface BoardService {
 
 	void addHitCnt(int boardIdx) throws Exception;
 
+	List<BoardDto> searchByCreator(String creatorId) throws Exception;
+
 }

@@ -29,5 +29,7 @@ public interface BoardMapper {
 	String findCreator(@Param("boardIdx") int boardIdx) throws Exception;
 
 	void addHitCnt(int boardIdx) throws Exception;
+
+	List<BoardDto> searchByCreator(String creatorId) throws Exception;
 	
 }

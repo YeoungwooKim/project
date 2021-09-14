@@ -46,7 +46,6 @@ public class BoardController {
 	public ModelAndView list(@RequestParam(value = "currentPage", required = false) String currentPage)
 			throws Exception {
 		Pagination pagination = new Pagination(boardService.getTotalRecord());
-		;
 		ModelAndView mv = new ModelAndView("project/list");
 		int currPage;
 		if (pagination.chkCurrentPage(currentPage)) {
@@ -61,6 +60,16 @@ public class BoardController {
 
 		return mv;
 	}
+	
+	@GetMapping("/list/creator/{creator}")
+	public ModelAndView searchByCreator(@PathVariable("creator") String creatorId) throws Exception {
+		ModelAndView mv = new ModelAndView("project/list");
+		List<BoardDto> list = boardService.searchByCreator(creatorId);
+		mv.addObject("list", list);
+		mv.addObject("title","creator");
+		return mv;
+	}
+	
 
 	@GetMapping("/write")
 	public ModelAndView write(HttpServletRequest request) throws Exception {
@@ -80,7 +89,6 @@ public class BoardController {
 		// boardValidator.validate(board, bindingResult);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
-		// log.debug(user.getUsername() + "/" + user.getAuthorities());
 
 		if (bindingResult.hasErrors()) {
 			log.debug(bindingResult.getFieldError() + "  dto 어노테이션서 에러 출현");
@@ -90,9 +98,9 @@ public class BoardController {
 				return "redirect:/board/write";
 		} else {
 			if (board.getBoardIdx() > 0) { // 파라미터값이 존재, 게시글 수정
-				if (user.getUsername().equals(boardService.findCreator(board.getBoardIdx()))) {
+				if(isEqualUser(boardService.findCreator(board.getBoardIdx()), user.getUsername())) {
 					boardService.modifyBoardList(board, board.getBoardIdx());
-				} else if (user.getAuthorities().toString().equals("[ROLE_ADMIN]")) {
+				} else if (isProperAuth(user.getAuthorities().toString())) {
 					boardService.modifyBoardList(board, board.getBoardIdx());
 				}
 			} else { // 파라미터값이 존재X, 게시글 생성
@@ -107,11 +115,27 @@ public class BoardController {
 	public String delete(@RequestParam int boardIdx) throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
-		if (user.getUsername().equals(boardService.findCreator(boardIdx))) {
+		if (isEqualUser(boardService.findCreator(boardIdx), user.getUsername())) {
 			boardService.delete(boardIdx);
-		} else if (user.getAuthorities().toString().equals("[ROLE_ADMIN]")) {
+		} else if (isProperAuth(user.getAuthorities().toString())) {
 			boardService.delete(boardIdx);
 		}
 		return "redirect:/board/list";
+	}
+	
+	public Boolean isEqualUser(String creatorId, String currentUser) {
+		if(creatorId.equals(currentUser)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public Boolean isProperAuth(String currentAuth) {
+		if(currentAuth.equals("[ROLE_ADMIN]")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

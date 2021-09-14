@@ -11,12 +11,12 @@
 <meta name="generator" content="Jekyll v4.1.1">
 <title th:text="${title}"></title>
 
-<link rel="canonical"
-	href="https://getbootstrap.com/docs/4.5/examples/starter-template/">
+<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/starter-template/">
 <link th:href="@{/assets/dist/css/bootstrap.min.css}" rel="stylesheet">
 
 <!-- Custom styles for this template -->
 <link th:href="@{/css/starter-template.css}" rel="stylesheet">
+<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/starter-template/">
 </head>
 <body>
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"
@@ -49,13 +49,12 @@
 				
 			</div>
 			&nbsp;&nbsp;
-			<div class="dropdown">
-				<a class="btn btn-secondary btn-lg nav-link dropdown-toggle"
-					id="dropdownMenuButton1" data-toggle="dropdown"
-					aria-haspopup="true" aria-expanded="false">More Info</a>
+			<div class="dropdown" th:if="${title}!=mypage AND ${title}!=creator">
+				<a class="btn btn-secondary btn-lg nav-link dropdown-toggle" id="dropdownMenuButton1" 
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More Info</a>
 				<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-					<li><a class="dropdown-item" href="#">Action</a></li>
-					<li><a class="dropdown-item" href="#">Another action</a></li>
+					<li><a class="dropdown-item" th:href="@{/mypage}" sec:authorize="isAuthenticated()"> My Page</a></li>
+					<li><a class="dropdown-item" href="#" sec:authorize="isAuthenticated()"> Message box</a></li>
 					<li>
 						<hr class="dropdown-divider">
 					</li>
@@ -68,6 +67,11 @@
 						</a>
 					</li>
 				</ul>
+			</div>
+			<div th:unless="${title}!=mypage AND ${title}!=creator">
+				<a class="btn btn-secondary btn-lg" th:href="@{/logout}" sec:authorize="isAuthenticated()">
+					Log-out 
+				</a>
 			</div>
 			<!-- </div>		 -->
 

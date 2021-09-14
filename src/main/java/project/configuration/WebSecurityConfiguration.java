@@ -27,7 +27,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-				.antMatchers("/test", "/", "/register", "/css/**", "/assets/**").permitAll()
+				.antMatchers("/test", "/", "/register", "/css/**", "/assets/**", "/js/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
 			.formLogin()
@@ -45,7 +45,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .dataSource(dataSource)
                 .passwordEncoder(passwordEncoder())
                 .usersByUsernameQuery("select user_id, user_pw, enabled from user where user_id = ?")
-                .authoritiesByUsernameQuery("select username, authority from role where username=?");
+                .authoritiesByUsernameQuery("select username, authority from role where username = ?");
     }
 	
 	@Bean

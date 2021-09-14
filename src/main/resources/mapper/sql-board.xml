@@ -120,5 +120,21 @@
 				board_idx=#{boardIdx}
 		]]>
 	</update>
-	
+	<select id="searchByCreator" parameterType="string" resultType="project.project.dto.BoardDto">
+		SELECT
+				board_idx,
+				title,
+				contents,
+				hit_cnt,
+				creator_id,
+				DATE_FORMAT(created_date, '%Y.%m.%d %H:%i:%s') AS created_date,				
+				DATE_FORMAT(updated_date, '%Y.%m.%d %H:%i:%s') AS updated_date
+			FROM
+				board
+			WHERE
+				deleted_yn = 'N'
+				AND
+				creator_id = #{creatorId}
+			ORDER BY board_idx DESC
+	</select>
 </mapper>

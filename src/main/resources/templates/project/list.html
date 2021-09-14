@@ -6,7 +6,10 @@
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"
 		th:replace="/fragments/common :: menu"></nav>
 
-	<div class="container">
+	<div class="container" th:if="!${#strings.contains(#httpServletRequest.requestURI,'creator')}">
+		<!-- <div th:text="${#httpServletRequest.requestURI}"></div>
+		<div th:text="${#strings.contains(#httpServletRequest.requestURI,'creator')} ? 'true' : 'false'"></div> -->
+		
 		<h2>게시판</h2>
 		<div>
 		  	<div class="float-left" th:text="|게시글 총 합계 : ${pagination.getTotalRecord}|"></div>
@@ -130,7 +133,38 @@
 			</ul>
 		</div>
 	</div>
-
+	<div class="container" th:unless="!${#strings.contains(#httpServletRequest.requestURI,'creator')}">
+	<h2>게시판</h2>
+		<div>
+		  <!-- 	<div class="float-left" th:text="|게시글 총 합계 : ${pagination.getTotalRecord}|"></div> -->
+		</div>
+		<div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">idx</th>
+						<th scope="col">title</th>
+						<th scope="col">hit_cnt</th>
+						<th scope="col">creator_id</th>
+						<th scope="col">created_date</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:if="${#lists.size(list)} > 0" th:each="list : ${list}">
+						<th scope="row" th:text="${list.boardIdx}"></th>
+						<td><a th:text="${list.title}" th:href="@{/board/write(id=${list.boardIdx})}"></a></td>
+						<td th:text="${list.hitCnt}"></td>
+						<td th:text="${list.creatorId}"></td>
+						<td th:text="${list.createdDate}"></td>
+					</tr>
+					<tr th:unless="${#lists.size(list)} > 0">
+						<th scope="row"></th>
+						<td colspan="4">조회된 결과가 없습니다.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 	<!-- /.container -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<script>

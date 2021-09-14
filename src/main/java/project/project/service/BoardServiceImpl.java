@@ -61,4 +61,9 @@ public class BoardServiceImpl implements BoardService {
 	public void addHitCnt(int boardIdx) throws Exception {
 		boardMapper.addHitCnt(boardIdx);
 	}
+
+	@Override
+	public List<BoardDto> searchByCreator(String creatorId) throws Exception {
+		return boardMapper.searchByCreator(creatorId);
+	}
 }
