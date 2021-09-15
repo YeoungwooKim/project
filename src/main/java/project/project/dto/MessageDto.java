@@ -8,5 +8,5 @@ public class MessageDto {
 	private String recipient;
 	private String title;
 	private String content;
-
+	private String postDate;
 }

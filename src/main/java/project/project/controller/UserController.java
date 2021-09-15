@@ -31,6 +31,15 @@ public class UserController {
 		return new ModelAndView("project/test");
 	}
 	
+	@GetMapping("/myMessage")
+	public ModelAndView showAllMessage() throws Exception {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+		ModelAndView mv = new ModelAndView("project/myMessage");
+		mv.addObject("msg", userService.searchMailBox(user.getUsername(), userService.getMsgCount(user.getUsername())));
+		return mv;
+	}
+	
 	@GetMapping("/mypage")
 	public ModelAndView myPage() throws Exception {
 		ModelAndView mv = new ModelAndView("project/mypage");
@@ -46,7 +55,7 @@ public class UserController {
 		//유저 이메일 정보 넘겨주기.
 		return mv;
 	}	
-
+	
 	@PutMapping("/editMyInfo")
 	public String editMyInfo(UserDto postedUserValue) throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
