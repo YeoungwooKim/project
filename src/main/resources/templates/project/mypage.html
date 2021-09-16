@@ -46,7 +46,7 @@
 				<h6 class="border-bottom border-gray pb-2 mb-0">
 					My Message-Box 
 					<small class="d-block text-right mt-3"> 
-						<a href="#">
+						<a th:href="@{/message}" onClick="window.open(this.href, '', 'width=550, height=700');  return false;" >
 							Send new message
 						</a>
 					</small>
@@ -63,7 +63,8 @@
 						<div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
 							<div class="d-flex justify-content-between align-items-center w-100">
 								<strong class="text-gray-dark" th:text="${receiveMail.title}"> </strong> 
-									<a href="#">
+									<a th:href="@{/message(target=${receiveMail.sender},idx=${receiveMail.idx})}"
+										onClick="window.open(this.href, '', 'width=550, height=700');  return false;">
 										Detail
 									</a>
 							</div>
@@ -71,16 +72,15 @@
 						</div>
 					</div>
 				</div>
-				
 				<div th:unless="${#lists.size(receiveMail)} > 0" >
 					<div class="media text-muted pt-3 " >
-						There's no message..
+						There's no message which you didn't seen..
 					</div>
 				</div>
-				<small class="d-block text-right mt-3" th:if="${msgCount} > 2" > 
-						<a th:href="@{/myMessage}">See more message</a>
+				<small class="d-block text-right mt-3" th:if="${msgCount} > 0" > 
+						<a th:href="@{/myMessage}">See message that you've seen before</a>
 				</small>
-				<small class="d-block text-right mt-3" th:unless="${msgCount} > 2" > </small>
+				<small class="d-block text-right mt-3" th:unless="${msgCount} > 0" > </small>
 			</li>
 		</ul>
 	</div>
@@ -100,7 +100,7 @@
 					<div class="d-flex justify-content-between align-items-center w-100">
 						<strong class="text-gray-dark" th:text="${myBoards.title}"> </strong> 
 							<a th:href="@{/board/write(id=${myBoards.boardIdx})}" 
-								onClick="window.open(this.href, '', 'width=550, height=700'); " >
+								onClick="window.open(this.href, '', 'width=550, height=700');  return false;" >
 								See detail
 							</a>
 					</div>

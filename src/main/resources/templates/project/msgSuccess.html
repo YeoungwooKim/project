@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title> Message POST RESULT</title>
+</head>
+<body>
+	<h1> Msg successfully posted!</h1>
+	<h3 id="closeCount"></h3>
+</body>
+	<script type='text/javascript'>
+		var num = 5;
+		var count = document.getElementById("closeCount");
+		setInterval(function(){
+			count.innerHTML= num + "초 후 자동으로 종료."
+			num--;
+		},1000);
+    	opener=self;
+     	setTimeout('self.close()',5000);
+	</script>
+</html>

@@ -45,25 +45,36 @@
 		WHERE
 			user_id = #{username}
 	</update>
+	
 	<select id="searchMailBox" resultType="project.project.dto.MessageDto">
 		SELECT 
 			msg.*
 		FROM (
 				SELECT
-					sender, recipient, title, content, post_date
+					idx, sender, recipient, title, content, post_date
 				FROM
 					message
-				WHERE
+				WHERE 
 					recipient = #{username}
+					<choose>
+						<when test="tf == true"> 
+						AND 
+						is_read = 0
+						</when>
+						<otherwise> 
+						/* hello */
+						</otherwise>
+					</choose>
 				ORDER BY post_date DESC
-			 ) msg LIMIT #{cnt}
+			 ) msg LIMIT #{cnt}  
 	</select>
+	
 	<select id="getMsgCount" resultType="int">
 		SELECT
 			count(*) 
 		FROM (
 			SELECT
-				sender, recipient, title, content, post_date
+				idx, sender, recipient, title, content, post_date
 			FROM
 				message 
 			WHERE 
@@ -87,4 +98,36 @@
 				creator_id = #{username}
 			ORDER BY board_idx DESC
 	</select>
+	<update id="checkMessage" parameterType="int">
+		UPDATE 
+			message 
+		SET 
+			is_read = 1
+		WHERE
+			idx = #{idx}			
+	</update>
+	<select id="searchBySenderAndIdx" resultType="project.project.dto.MessageDto">
+		SELECT
+			idx, sender, recipient, title, content, post_date
+		FROM
+			message
+		WHERE
+			idx = #{idx}
+			AND
+			sender = #{recipient}
+	</select>
+	<insert id="postMessage">
+		INSERT 
+			INTO message(sender, recipient, title, content, post_date)
+		VALUES
+			(#{username}, #{msg.recipient}, #{msg.title}, #{msg.content}, now())
+	</insert>
+	
+	
+	
+	
+	
+	
+	
+	
 </mapper>

@@ -21,9 +21,15 @@ public interface UserMapper {
 
 	void editEmail(@Param("username") String username, @Param("userEmail")  String userEmail) throws Exception;
 
-	List<MessageDto> searchMailBox(@Param("username") String username, @Param("cnt") int cnt) throws Exception;
-
+	List<MessageDto> searchMailBox(@Param("tf") boolean tf, @Param("username") String username, @Param("cnt") int cnt) throws Exception;
+	
 	int getMsgCount(String username) throws Exception;
 
 	List<BoardDto> findMyBoard(String username) throws Exception;
+
+	void checkMessage(int idx) throws Exception;
+
+	MessageDto searchBySenderAndIdx(@Param("recipient") String recipient, @Param("idx") int idx) throws Exception;
+
+	void postMessage(@Param("msg") MessageDto msg, @Param("username") String username) throws Exception;
 }

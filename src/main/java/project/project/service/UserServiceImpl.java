@@ -4,6 +4,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,9 @@ import project.project.mapper.UserMapper;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+	Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
@@ -46,8 +51,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<MessageDto> searchMailBox(String username, int cnt) throws Exception {
-		return userMapper.searchMailBox(username, cnt);
+	public List<MessageDto> searchMailBox(boolean tf, String username, int cnt) throws Exception {
+		return userMapper.searchMailBox(tf, username, cnt);
 	}
 
 	@Override
@@ -58,6 +63,21 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<BoardDto> findMyBoard(String username) throws Exception {
 		return userMapper.findMyBoard(username);
+	}
+
+	@Override
+	public void checkMessage(int idx) throws Exception {
+		userMapper.checkMessage(idx);
+	}
+
+	@Override
+	public MessageDto searchBySenderAndIdx(String recipient, int idx) throws Exception {
+		return userMapper.searchBySenderAndIdx(recipient, idx);
+	}
+
+	@Override
+	public void postMessage(MessageDto msg, String username) throws Exception {
+		userMapper.postMessage(msg, username);
 	}
 
 }

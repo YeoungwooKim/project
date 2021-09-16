@@ -16,10 +16,16 @@ public interface UserService {
 
 	void editEmail(String username, String userEmail) throws Exception;
 
-	List<MessageDto> searchMailBox(String username, int cnt) throws Exception;
+	List<MessageDto> searchMailBox(boolean tf, String username, int cnt) throws Exception;
 
 	int getMsgCount(String username) throws Exception;
 
 	List<BoardDto> findMyBoard(String username) throws Exception;
+
+	void checkMessage(int idx) throws Exception;
+
+	MessageDto searchBySenderAndIdx(String recipient, int idx) throws Exception;
+
+	void postMessage(MessageDto msg, String username) throws Exception;
 
 }

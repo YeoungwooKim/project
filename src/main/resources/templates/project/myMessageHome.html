@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head">
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author"
+	content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+<meta name="generator" content="Jekyll v4.1.1">
+<title th:text="${title}"></title>
+
+<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/starter-template/">
+<link th:href="@{/assets/dist/css/bootstrap.min.css}" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link th:href="@{/css/starter-template.css}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/starter-template/">
+<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/pricing/">
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"
+		th:fragment="menu">
+		<a class="navbar-brand" href="#">Springboot Tutorial</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarsExampleDefault"
+			aria-controls="navbarsExampleDefault" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		
+		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item " th:classappend="${title}=='Index'? 'active'">
+					<a class="nav-link" href="/"> 
+						Home 
+						<span class="sr-only" th:if="${title}=='Index'">(current)</span>
+					</a>
+				</li>
+				<li class="nav-item " th:classappend="${title}=='Board'? 'active'">
+					<a class="nav-link" href="/board/list?currentPage=0"> 
+						Board 
+						<span class="sr-only" th:if="${title}=='Board'">(current)</span>
+					</a>
+				</li>
+
+			</ul>
+			&nbsp;&nbsp;
+			<a class="btn btn-secondary btn-lg " th:href="@{/logout}" >log-out</a>
+		</div>
+	</nav>	
+
+
+
+	<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+		<h1 class="display-4">Message-box</h1>
+		<p>Check your message</p>
+	</div>
+
+		<div class="row mx-5" >
+			<div class="col-sm-4 mb-5">
+	    		<form th:action="@{/message}" method="post" >
+			    	<div class="card bg-warning">
+			      		<div class="card-body">
+			        		<div class="card-title mb-1"> 
+		        				<input type="text" class="form-control mt-n1 mb-n2" id="title" name="title" placeholder="title..">
+			        		</div>
+		   		     	</div>
+		   		     	<hr class="my-n1">
+		   		     	<div class="card-body">
+			        		<div class="form-row mb-n2">
+								<textarea class="form-control " id="contents" name="content" rows="2" placeholder="contents.."></textarea>
+							</div>
+			        	</div>
+			        	<div class="card-body form-row mt-n3">
+							<div class="input-group">
+								<input type="text" class="form-control" id="recipient" name="recipient" placeholder="recipient">
+								<div class="input-group-append">
+									<button type="submit" class="btn btn-success">Send</button>
+								</div>
+							</div>
+						</div>
+			    	</div>
+		    	</form>
+		  	</div>
+		
+		
+		
+			<div class="col-sm-4 mb-5"  th:each="msg : ${msg}">
+		    	<div class="card">
+		      		<div class="card-body">
+		        		<h5 class="card-title" th:text="${msg.title}"> </h5>
+		        		<hr class="mb-n1">
+		        		<div class="text-right">
+		        			<small class="card-text " th:text="|From ${msg.sender} (${msg.postDate}) |" ></small>
+		        		</div>
+		        		<hr class="mt-2">
+		        		<th:block th:if="${#strings.length(msg.content)} > 15">
+		        			<details>
+								<summary th:text="|skipped...|"></summary>
+							  	<p th:text="${msg.content}"></p>
+							</details>
+		        		</th:block>
+		        		<th:block th:unless="${#strings.length(msg.content)} > 15">
+		        			<p class="card-text" th:text="${msg.content}" ></p>
+		        		</th:block>
+		        		<hr>
+		        		<a href="#" class="btn btn-primary float-right">reply</a>
+		  		    </div>
+		    	</div>
+		  	</div>
+		  	
+
+		  
+		  
+		  
+		</div>
+</body>
+</html>
