@@ -19,11 +19,12 @@
     <!-- Custom styles for this template -->
 <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/starter-template/">
 <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/pricing/">
+<script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
 </head>
 <body>
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"
 		th:fragment="menu">
-		<a class="navbar-brand" href="#">Springboot Tutorial</a>
+		<a class="navbar-brand" href="/">Springboot Tutorial</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarsExampleDefault"
 			aria-controls="navbarsExampleDefault" aria-expanded="false"
@@ -47,7 +48,12 @@
 				</li>
 
 			</ul>
+			<div class="text-light">
+				Hello, 
+				<span sec:authentication="name"></span> 
+			</div>
 			&nbsp;&nbsp;
+			<a class="btn btn-secondary btn-lg mr-3" th:href="@{/mypage}" >my page</a>
 			<a class="btn btn-secondary btn-lg " th:href="@{/logout}" >log-out</a>
 		</div>
 	</nav>	
@@ -56,42 +62,26 @@
 
 	<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
 		<h1 class="display-4">Message-box</h1>
-		<p>Check your message</p>
+		<p >Check your message</p>
+		<a th:href="@{/message}" onClick="window.open(this.href, '', 'width=550, height=700');  return false;"
+			class="float-right btn btn-outline-info mr-5" >
+			Send new message
+		</a>
+		<br>
 	</div>
 
 		<div class="row mx-5" >
-			<div class="col-sm-4 mb-5">
-	    		<form th:action="@{/message}" method="post" >
-			    	<div class="card bg-warning">
-			      		<div class="card-body">
-			        		<div class="card-title mb-1"> 
-		        				<input type="text" class="form-control mt-n1 mb-n2" id="title" name="title" placeholder="title..">
-			        		</div>
-		   		     	</div>
-		   		     	<hr class="my-n1">
-		   		     	<div class="card-body">
-			        		<div class="form-row mb-n2">
-								<textarea class="form-control " id="contents" name="content" rows="2" placeholder="contents.."></textarea>
-							</div>
-			        	</div>
-			        	<div class="card-body form-row mt-n3">
-							<div class="input-group">
-								<input type="text" class="form-control" id="recipient" name="recipient" placeholder="recipient">
-								<div class="input-group-append">
-									<button type="submit" class="btn btn-success">Send</button>
-								</div>
-							</div>
-						</div>
-			    	</div>
-		    	</form>
-		  	</div>
-		
-		
-		
 			<div class="col-sm-4 mb-5"  th:each="msg : ${msg}">
 		    	<div class="card">
 		      		<div class="card-body">
-		        		<h5 class="card-title" th:text="${msg.title}"> </h5>
+		      			<h5 class="card-title ml-n2 mt-n2" th:classappend="${msg.isRead==1} ? 'far fa-check-circle' : 'far fa-circle' " style="display:inline"> </h5>
+		        		<h5 class="card-title" th:text="${msg.title}" style="display:inline"> </h5>
+		        		
+		        		<form th:action="@{/message}" method="post" class="float-right">
+		        			<input type="hidden" name="idx" th:value="${msg.idx}">
+		        			<input type="hidden" name="_method" value="DELETE"/>
+		        			<button type="submit" class="btn btn-outline-danger" > delete </button>
+		        		</form>
 		        		<hr class="mb-n1">
 		        		<div class="text-right">
 		        			<small class="card-text " th:text="|From ${msg.sender} (${msg.postDate}) |" ></small>
@@ -107,7 +97,10 @@
 		        			<p class="card-text" th:text="${msg.content}" ></p>
 		        		</th:block>
 		        		<hr>
-		        		<a href="#" class="btn btn-primary float-right">reply</a>
+		        		<a th:href="@{/message(recipient=${msg.recipient},idx=${msg.idx})}" onClick="window.open(this.href, '', 'width=550, height=700');  return false;"
+		        				class="btn btn-outline-primary float-right mb-3">
+										reply
+						</a>
 		  		    </div>
 		    	</div>
 		  	</div>

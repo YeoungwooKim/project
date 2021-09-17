@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>RESULT</title>
+		<style>
+			#main { height: 100vh; }
+		</style>
+	
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	</head>
+	<body>
+	<th:block th:if="${title}!=null">
+		<div class="d-flex justify-content-center align-items-center" id="main">
+			<h1 class="mr-3 pr-3 align-top border-right inline-block align-content-center"
+				th:text="${title} == ${true} ? 'Success' : 'Failed' "> </h1>
+			<div class="inline-block align-middle">
+				<h2 class="font-weight-normal lead" id="closeCount"> 3초 후 자동으로 종료.</h2>
+			</div>
+		</div>
+	</th:block>
+	<th:block th:unless="${title}!=null">
+		<div class="d-flex justify-content-center align-items-center" id="main">
+			<h1 class="mr-3 pr-3 align-top border-right inline-block align-content-center"
+				th:text="${title} == ${true} ? 'Success' : 'Failed' "> </h1>
+			<div class="inline-block align-middle">
+				<h2 class="font-weight-normal lead" id="closeCount"> 3초 후 자동으로 종료. </h2>
+			</div>
+		</div>
+	</th:block>
+
+	</body>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script type='text/javascript'>
+		$(document).ready(function(){
+			var num = 3;
+			var count = document.getElementById("closeCount");
+			setInterval(function() {
+				count.innerHTML = num + "초 후 자동으로 종료."
+				num--;
+			}, 1000);
+			opener = self;
+			setTimeout('self.close()', 5000);
+		});
+	</script>
+</html>

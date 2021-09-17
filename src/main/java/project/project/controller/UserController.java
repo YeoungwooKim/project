@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import io.micrometer.core.instrument.util.StringUtils;
+import io.micrometer.core.ipc.http.HttpSender.Request;
 import project.project.dto.MessageDto;
 import project.project.dto.UserDto;
 import project.project.service.UserService;
@@ -31,43 +33,69 @@ public class UserController {
 
 	@GetMapping("/test")
 	public ModelAndView test() throws Exception {
-		return new ModelAndView("project/test");
+		return new ModelAndView("project/msgResult");
 	}
-	
+
 	@GetMapping("/myMessage")
 	public ModelAndView showAllMessage() throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 		ModelAndView mv = new ModelAndView("project/myMessageHome");
-		mv.addObject("msg", userService.searchMailBox(false, user.getUsername(), userService.getMsgCount(user.getUsername())));
+		mv.addObject("msg",
+				userService.searchMailBox(false, user.getUsername(), userService.getMsgCount(user.getUsername())));
 		return mv;
 	}
-	
+
 	@GetMapping("/message")
-	public ModelAndView openMessage(@RequestParam(value = "target", required = false) String recipient,
+	public ModelAndView openMessage(@RequestParam(value = "recipient", required = false) String recipient,
 			@RequestParam(value = "idx", required = false) String idx) throws Exception {
-		ModelAndView mv = new ModelAndView("project/message");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		ModelAndView mv = new ModelAndView("project/message");
 		User user = (User) auth.getPrincipal();
-		if(StringUtils.isEmpty(recipient) && StringUtils.isEmpty(idx)) {
+		if (StringUtils.isEmpty(recipient) && StringUtils.isEmpty(idx)) {
 			mv.addObject("title", "new Message");
 		} else {
-			userService.checkMessage(Integer.parseInt(idx));
-			mv.addObject("msg", userService.searchBySenderAndIdx(recipient, Integer.parseInt(idx)));
-			mv.addObject("title", "Detail ");
+			// 보낸 메세지, 받은 메세지 페이지 추가 예정
+			log.debug(recipient + " : " + user.getUsername());
+			if (recipient.equals(user.getUsername())) {
+				userService.checkMessage(Integer.parseInt(idx));
+				mv.addObject("msg", userService.searchBySenderAndIdx(recipient, Integer.parseInt(idx)));
+				mv.addObject("title", "Detail ");
+			} else {
+				mv.addObject("title", false);
+				mv.setViewName("project/msgResult");
+			}
 		}
 		return mv;
 	}
-	
+
 	@PostMapping("/message")
-	public ModelAndView postMessage(MessageDto msg) throws Exception {
+	public ModelAndView postMessage(MessageDto msg, HttpServletRequest request) throws Exception {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		ModelAndView mv = new ModelAndView();
+		User user = (User) auth.getPrincipal();
+		try {
+			userService.postMessage(msg, user.getUsername());
+		} catch (Exception e) {
+			mv.setViewName("project/msgResult");
+			mv.addObject("title", false);
+			return mv;
+		}
+		mv.setViewName("project/msgResult");
+		mv.addObject("title", true);
+		return mv;
+
+	}
+
+	@DeleteMapping("/message")
+	public String deleteMessage(int idx) throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
-		userService.postMessage(msg, user.getUsername());
-		return new ModelAndView("project/msgSuccess");
+
+		userService.deleteMsg(idx, user.getUsername());
+		return "redirect:/myMessage";
 	}
-	
-	
+
 	@GetMapping("/mypage")
 	public ModelAndView myPage() throws Exception {
 		ModelAndView mv = new ModelAndView("project/mypage");
@@ -75,38 +103,38 @@ public class UserController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 		mv.addObject("email", userService.searchEmail(user.getUsername()));
-		
+
 		mv.addObject("receiveMail", userService.searchMailBox(true, user.getUsername(), 2));
 		mv.addObject("msgCount", userService.getMsgCount(user.getUsername()));
-		
+
 		mv.addObject("myBoard", userService.findMyBoard(user.getUsername()));
-		//유저 이메일 정보 넘겨주기.
+		// 유저 이메일 정보 넘겨주기.
 		return mv;
-	}	
-	
+	}
+
 	@PutMapping("/editMyInfo")
 	public String editMyInfo(UserDto postedUserValue) throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 
-		if(postedUserValue.getUserPw().isEmpty()) {
+		if (postedUserValue.getUserPw().isEmpty()) {
 			userService.editEmail(user.getUsername(), postedUserValue.getUserEmail());
 		} else {
 			userService.editInfo(user.getUsername(), postedUserValue);
 		}
 		return "redirect:/mypage";
-	} 
-	
+	}
+
 	@GetMapping("/login")
 	public ModelAndView login() throws Exception {
 		ModelAndView mv = new ModelAndView("project/login");
 		return mv;
 	}
-	
+
 	@GetMapping("/logout")
 	public String logout(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth != null) 
+		if (auth != null)
 			new SecurityContextLogoutHandler().logout(req, res, auth);
 		return "redirect:/";
 	}
@@ -121,8 +149,13 @@ public class UserController {
 	@PostMapping("/register")
 	public String register(UserDto user) throws Exception {
 		ModelAndView mv = new ModelAndView("project/register");
-		userService.saveUser(user);
-		mv.addObject("user", user);
-		return "redirect:/";
+		if(userService.checkUser(user)) {
+			userService.saveUser(user);
+			mv.addObject("user", user);
+			return "redirect:/";
+		} else {
+			return "redirect:/register";
+		}
+
 	}
 }

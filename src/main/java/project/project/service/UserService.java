@@ -28,4 +28,9 @@ public interface UserService {
 
 	void postMessage(MessageDto msg, String username) throws Exception;
 
+	void deleteMsg(int idx, String username) throws Exception;
+
+	boolean checkUser(UserDto user) throws Exception;
+
+
 }

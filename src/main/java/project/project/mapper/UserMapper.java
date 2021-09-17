@@ -27,9 +27,13 @@ public interface UserMapper {
 
 	List<BoardDto> findMyBoard(String username) throws Exception;
 
-	void checkMessage(int idx) throws Exception;
+	void checkMessage(@Param("idx") int idx) throws Exception;
 
 	MessageDto searchBySenderAndIdx(@Param("recipient") String recipient, @Param("idx") int idx) throws Exception;
 
 	void postMessage(@Param("msg") MessageDto msg, @Param("username") String username) throws Exception;
+
+	void deleteMsg(@Param("idx") int idx, @Param("username") String username) throws Exception;
+
+	boolean checkUser(UserDto user) throws Exception;
 }

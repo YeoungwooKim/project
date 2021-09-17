@@ -19,17 +19,17 @@ import project.project.mapper.UserMapper;
 public class UserServiceImpl implements UserService {
 
 	Logger log = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private UserMapper userMapper;
 
 	@Override
 	public void saveUser(UserDto user) throws Exception {
 		user.setUserPw(passwordEncoder.encode(user.getUserPw()));
-		//roles 세팅
+		// roles 세팅
 		userMapper.saveUser(user);
 		userMapper.saveRole(user);
 	}
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void editEmail(String username, String userEmail) throws Exception {
-		userMapper.editEmail(username, userEmail);		
+		userMapper.editEmail(username, userEmail);
 	}
 
 	@Override
@@ -78,6 +78,16 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void postMessage(MessageDto msg, String username) throws Exception {
 		userMapper.postMessage(msg, username);
+	}
+
+	@Override
+	public void deleteMsg(int idx, String username) throws Exception {
+		userMapper.deleteMsg(idx, username);
+	}
+
+	@Override
+	public boolean checkUser(UserDto user) throws Exception {
+		return userMapper.checkUser(user);
 	}
 
 }

@@ -11,4 +11,5 @@ public class MessageDto {
 	private String content;
 	private String postDate;
 	private int isRead;
+	private String deletedYn;
 }
