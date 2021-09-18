@@ -20,27 +20,29 @@
 		<ul class="list-group list-group-horizontal">
 	  		<li class="list-group-item my-3 p-3 bg-white rounded shadow-sm w-50 mx-3">
 				<h6 class="border-bottom border-gray pb-2 mb-0">Edit My Info</h6>
-				<form th:action="@{/editMyInfo}" method="post" id="form" >
-					<div class="input-group my-3">
-						<div class="input-group-prepend">
-			  				<span class="input-group-text" id="basic-addon1">E-mail</span>
+				<div                     >
+					<form th:action="@{/editMyInfo}" method="post" id="form" >
+						<div class="input-group my-3">
+							<div class="input-group-prepend">
+				  				<span class="input-group-text" id="basic-addon1">E-mail</span>
+							</div>
+							<input type="email" class="form-control" aria-label="userEmail" id="userEmail" 
+								name="userEmail" aria-describedby="basic-addon1" th:value="${email}" style="text-align:right;">
 						</div>
-						<input type="email" class="form-control" aria-label="userEmail" id="userEmail" 
-							name="userEmail" aria-describedby="basic-addon1" th:value="${email}" style="text-align:right;">
-					</div>
-					<div class="input-group my-3">
-						<div class="input-group-prepend">
-			  				<span class="input-group-text" id="basic-addon2">Password</span>
+						<div class="input-group my-3">
+							<div class="input-group-prepend">
+				  				<span class="input-group-text" id="basic-addon2">Password</span>
+							</div>
+							<input type="password" class="form-control" aria-label="userPw" id="userPw" 
+								name="userPw" aria-describedby="basic-addon2" style="text-align:right;">
 						</div>
-						<input type="password" class="form-control" aria-label="userPw" id="userPw" 
-							name="userPw" aria-describedby="basic-addon2" style="text-align:right;">
-					</div>
-					<hr>
-					<small class="d-block text-right mt-3"> 
-						<button type="button" onclick="methodChange()" class="text-light btn btn-warning">Submit</button>
-					</small>
-					<div id="method"> </div>
-				</form>
+						<hr>
+						<small class="d-block text-right mt-3"> 
+							<button type="button" onclick="methodChange()" class="text-light btn btn-warning">Submit</button>
+						</small>
+						<div id="method"> </div>
+					</form>
+				</div>
 			</li>
 	  		<li class="list-group-item my-3 p-3 bg-white rounded shadow-sm w-50 mx-3">
 				<h6 class="border-bottom border-gray pb-2 mb-0">
@@ -121,7 +123,8 @@
 		<small class="d-block text-right mt-3" th:unless="${#lists.size(myBoard)} > 2"> </small>
 	</div>
 	</main>
-	<script>
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script type="text/javascript">
 		function methodChange(){
 			var method = document.getElementById("method");
 			var form = document.getElementById("form");
@@ -130,15 +133,6 @@
 		}
 	</script>
 	<link th:href="@{/css/offcanvas.css}" rel="stylesheet">
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-		crossorigin="anonymous"></script>
-	<script>
-		window.jQuery
-				|| document
-						.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')
-	</script>
-
 	<script th:src="@{/js/offcanvas.js}"></script>
 </body>
 </html>

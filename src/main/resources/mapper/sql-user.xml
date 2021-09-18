@@ -75,7 +75,7 @@
 						is_read = 0
 						</when>
 						<otherwise> 
-						/* hello */
+						/*  */
 						</otherwise>
 					</choose>
 					AND

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import io.micrometer.core.instrument.util.StringUtils;
-import io.micrometer.core.ipc.http.HttpSender.Request;
 import project.project.dto.MessageDto;
 import project.project.dto.UserDto;
 import project.project.service.UserService;
@@ -31,21 +30,16 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping("/test")
-	public ModelAndView test() throws Exception {
-		return new ModelAndView("project/msgResult");
-	}
 
 	@GetMapping("/myMessage")
 	public ModelAndView showAllMessage() throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 		ModelAndView mv = new ModelAndView("project/myMessageHome");
-		mv.addObject("msg",
-				userService.searchMailBox(false, user.getUsername(), userService.getMsgCount(user.getUsername())));
+		mv.addObject("msg", userService.searchMailBox(false, user.getUsername(), userService.getMsgCount(user.getUsername())));
 		return mv;
 	}
-
+	
 	@GetMapping("/message")
 	public ModelAndView openMessage(@RequestParam(value = "recipient", required = false) String recipient,
 			@RequestParam(value = "idx", required = false) String idx) throws Exception {
@@ -68,9 +62,9 @@ public class UserController {
 		}
 		return mv;
 	}
-
+	
 	@PostMapping("/message")
-	public ModelAndView postMessage(MessageDto msg, HttpServletRequest request) throws Exception {
+	public ModelAndView postMessage(MessageDto msg) throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		ModelAndView mv = new ModelAndView();
 		User user = (User) auth.getPrincipal();
@@ -111,7 +105,7 @@ public class UserController {
 		// 유저 이메일 정보 넘겨주기.
 		return mv;
 	}
-
+	
 	@PutMapping("/editMyInfo")
 	public String editMyInfo(UserDto postedUserValue) throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();

@@ -66,6 +66,13 @@
 					
 				</div>
 			</form>
+			<form>
+				<div>
+					
+				</div>
+			</form>
+			
+			
 			<form method="post" onsubmit="finalChk()" th:action="@{/board/write}" th:object="${board}" th:unless="${board.boardIdx}>0">
 				<!-- 새로 작성하는 경우임 -->
 				<table class="table">
