@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import project.project.dto.BoardDto;
+import project.project.dto.CommentDto;
 import project.project.mapper.BoardMapper;
 
 @Service
@@ -65,5 +66,15 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<BoardDto> searchByCreator(String creatorId) throws Exception {
 		return boardMapper.searchByCreator(creatorId);
+	}
+
+	@Override
+	public void addComment(CommentDto comment) throws Exception {
+		boardMapper.addComment(comment);
+	}
+
+	@Override
+	public List<CommentDto> searchComment(int boardIdx) throws Exception {
+		return boardMapper.searchComment(boardIdx);
 	}
 }

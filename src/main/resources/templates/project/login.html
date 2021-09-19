@@ -21,9 +21,7 @@
 		<img class="mb-4" th:src="@{/assets/brand/bootstrap-solid.svg}" alt="" width="72" height="72">
 		<h1 class="h3 mb-3 font-weight-normal">Log-in</h1>
 		<div th:if="${param.error}" class="alert alert-danger" role="alert">
-        	Invalid username and password.<span th:text="${param.authType}"></span> 
-        	<span th:text="${param}"></span>
-        	<span th:text="${#httpServletRequest}"></span>
+        	Invalid username and password.
     	</div>
     	<div th:if="${param.logout}" class="alert alert-warning" role="alert">
         	You have been logged out.

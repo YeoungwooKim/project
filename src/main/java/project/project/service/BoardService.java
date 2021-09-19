@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import project.project.dto.BoardDto;
+import project.project.dto.CommentDto;
 
 public interface BoardService {
 
@@ -29,4 +30,7 @@ public interface BoardService {
 
 	List<BoardDto> searchByCreator(String creatorId) throws Exception;
 
+	void addComment(CommentDto comment) throws Exception;
+	
+	List<CommentDto> searchComment(int boardIdx) throws Exception;
 }

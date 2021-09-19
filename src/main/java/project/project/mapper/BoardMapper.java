@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import project.project.dto.BoardDto;
+import project.project.dto.CommentDto;
 
 @Mapper
 public interface BoardMapper {
@@ -31,5 +32,8 @@ public interface BoardMapper {
 	void addHitCnt(int boardIdx) throws Exception;
 
 	List<BoardDto> searchByCreator(String creatorId) throws Exception;
+
+	void addComment(CommentDto comment) throws Exception;
 	
+	List<CommentDto> searchComment(int boardIdx) throws Exception;
 }

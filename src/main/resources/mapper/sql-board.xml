@@ -137,4 +137,38 @@
 				creator_id = #{creatorId}
 			ORDER BY board_idx DESC
 	</select>
+	<insert id="addComment" parameterType="project.project.dto.CommentDto">
+		INSERT 
+			INTO comment ( 
+						board_idx, 
+						comment_idx, 
+						creator_id, 
+						contents, 
+						created_date 
+						)
+			SELECT 
+				#{boardIdx} as board_idx, 
+				IF(MAX(comment_idx) IS NULL, 1, max(comment_idx) + 1) as comment_idx,  
+				#{creatorId}, 
+				#{contents}, 
+				NOW()  
+			FROM 
+				comment 
+			WHERE 
+				board_idx = #{boardIdx}
+	</insert>
+
+	<select id="searchComment" parameterType="int" resultType="project.project.dto.CommentDto">
+		SELECT
+			board_idx, 
+			comment_idx, 
+			creator_id, 
+			contents, 
+			created_date
+		FROM
+			comment
+		WHERE
+			board_idx = #{boardIdx}
+		ORDER BY comment_idx ASC
+	</select>
 </mapper>

@@ -20,9 +20,9 @@
 	<form class="form-signin" th:action="@{/register}" method="post">
 		<img class="mb-4" th:src="@{/assets/brand/bootstrap-solid.svg}" alt="" width="72" height="72">
 		<h1 class="h3 mb-3 font-weight-normal">Register</h1>
-		<!-- <div th:if="${param.error}" class="alert alert-danger" role="alert">
+	    <div th:if="${param.error}" class="alert alert-danger" role="alert">
         	Invalid username and password.
-    	</div> -->
+    	</div> 
 		<label for="userId" class="sr-only">User ID</label> 
 			<input type="text" id="userId" name="userId" class="form-control" placeholder="User ID" required autofocus>
 		<label for="userEmail" class="sr-only">User Email</label> 

@@ -1,7 +1,10 @@
 package project.project.controller;
 
+import java.net.BindException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,21 +68,23 @@ public class UserController {
 	}
 	
 	@PostMapping("/message")
-	public ModelAndView postMessage(MessageDto msg) throws Exception {
+	public ModelAndView postMessage(@Valid MessageDto msg, BindingResult bindingResult) throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		ModelAndView mv = new ModelAndView();
 		User user = (User) auth.getPrincipal();
-		try {
-			userService.postMessage(msg, user.getUsername());
-		} catch (Exception e) {
+		
+		if(bindingResult.hasErrors()) {
+			//log.debug( " >>>>>> " + bindingResult.getAllErrors());
 			mv.setViewName("project/msgResult");
 			mv.addObject("title", false);
-			return mv;
+			throw new Exception(bindingResult.getAllErrors().toString());
+		} else {
+			userService.postMessage(msg, user.getUsername());
+			mv.setViewName("project/msgResult");
+			mv.addObject("title", true);
 		}
-		mv.setViewName("project/msgResult");
-		mv.addObject("title", true);
+		
 		return mv;
-
 	}
 
 	@DeleteMapping("/message")

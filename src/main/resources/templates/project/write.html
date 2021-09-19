@@ -6,7 +6,7 @@
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"
 		th:replace="/fragments/common :: menu"></nav>
 
-	<div class="container">
+	<div class="container ">
 		<div th:if="${board.boardIdx}>0">
 			<h2>게시글 상세</h2>
 		</div>
@@ -18,90 +18,127 @@
 			<!-- <div>
 				<span th:text="${board}"></span>
 			</div>   -->
-			
-			<form method="post"  onsubmit="finalChk()" th:action="@{/board/write}" th:object="${board}" th:if="${board.boardIdx}>0" id="form">
-				<!-- 작성된거 열람 및 수정하는 경우임 -->
-				<table class="table">
-					<tbody>
-						<tr>
-							<th>writer</th>
-							<td th:text="${board.creatorId}"></td>
-							<th>hitCnt</th>
-							<td th:text="${board.hitCnt}"></td>
-							<th>created date</th>
-							<td th:text="${board.createdDate}"></td>
-						</tr>
-						<tr>
-							<th scope="row">title</th>
-							<td colspan="4">
-								<input type="text" class="form-control" th:field="*{title}" id="title">
-								<div class="invalid-feedback">
-							    	한글자 이하거나, 공백만 있는경우 불가
-							    </div>
-							</td>
-							<th> 
-								<div class="input-group mb-3 ">
-								  <span class="input-group-text">Index</span>
-								  <input type="text" class="form-control" th:field="*{boardIdx}"  th:readonly="${1}">
-								</div>
-							</th>
-						</tr>
-						<tr>
-							<th scope="row">contents</th>
-							<td colspan="5">
-								<textarea class="form-control" id="contents"  th:field="*{contents}" rows="8"></textarea>
-								<div class="invalid-feedback">
-							    	한글자 이하거나, 공백만 있는경우 불가
-							    </div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="text-right">
-					<a class="btn btn-danger" th:href="@{/board/list}">CANCEL</a>
-					<button type="button" class="btn btn-danger" onclick="methodChange()">DELETE</button>
-					<button type="submit" id="submitBtn" class="btn btn-primary">SAVE</button>
+			<th:block th:if="${board.boardIdx}>0" >
+				<form method="post" onsubmit="finalChk()" th:action="@{/board/write}" th:object="${board}" id="form">
+					<!-- 작성된거 열람 및 수정하는 경우임 -->
+					<table class="table">
+						<tbody>
+							<tr>
+								<th>writer</th>
+								<td th:text="${board.creatorId}"></td>
+								<th>hitCnt</th>
+								<td th:text="${board.hitCnt}"></td>
+								<th>created date</th>
+								<td th:text="${board.createdDate}"></td>
+							</tr>
+							<tr>
+								<th scope="row">title</th>
+								<td colspan="4">
+									<input type="text" class="form-control" th:field="*{title}" id="title">
+									<div class="invalid-feedback">
+								    	한글자 이하거나, 공백만 있는경우 불가
+								    </div>
+								</td>
+								<th> 
+									<div class="input-group mb-3 ">
+									  <span class="input-group-text">Index</span>
+									  <input type="text" class="form-control" th:field="*{boardIdx}"  th:readonly="${1}">
+									</div>
+								</th>
+							</tr>
+							<tr>
+								<th scope="row">contents</th>
+								<td colspan="5">
+									<textarea class="form-control" id="contents"  th:field="*{contents}" rows="8"></textarea>
+									<div class="invalid-feedback">
+								    	한글자 이하거나, 공백만 있는경우 불가
+								    </div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="text-right">
+						<a class="btn btn-danger" th:href="@{/board/list}">CANCEL</a>
+						<button type="button" class="btn btn-danger" onclick="methodChange()">DELETE</button>
+						<button type="submit" id="submitBtn" class="btn btn-primary">SAVE</button>
+					</div>
+					<div id="method">
+						
+					</div>
+				</form>
+		       
+				<div>	
+					<h3 class="my-3"> Comment </h3>
+					<table class="table" th:if="${#lists.size(comment)} >0 ">
+						<th:block th:each="comment : ${comment}">
+							<tr>
+								<td class="w-25" th:text="${comment.creatorId}"> </td>
+								<td colspan="2" th:text="${comment.contents}">comment contents</td>
+								<td class="text-right" >
+									<form>
+										<input type="hidden" name="creatorId" th:value="${comment.creatorId}">
+										<input type="hidden" name="commentIdx" th:value="${comment.commentIdx}">
+										<button type="submit" class="btn btn-outline-warning">delete</button>
+									</form>
+								</td>
+							</tr>
+							<tr class="text-muted">
+								<td colspan="4" th:text="${comment.createdDate}" class="text-right"> </td>	
+							</tr>
+							<tr><td colspan="4"></td></tr>
+						</th:block>
+					</table>
+					<table class="table" th:unless="${#lists.size(comment)} >0 ">
+						<h3> There's no comment in this board...</h3>
+					</table>
+					<details class="mx-3">
+						<summary> Write comment</summary>
+						<table class="table">
+							<tbody>
+								<tr>
+									<form th:action="@{/commentPost}" method="post">
+										<td sec:authentication="name" class="w-25"></td>
+										<input type="hidden" name="boardIdx" th:value="${board.boardIdx}">
+										<td class="w-50"><textarea name="contents" class="form-control" rows="3" ></textarea></td>
+										<td ><button type="submit" class="w-50"> submit </button></td>
+									</form>
+								</tr>
+							</tbody>
+						</table>
+					</details>
 				</div>
-				<div id="method">
-					
-				</div>
-			</form>
-			<form>
-				<div>
-					
-				</div>
-			</form>
-			
-			
-			<form method="post" onsubmit="finalChk()" th:action="@{/board/write}" th:object="${board}" th:unless="${board.boardIdx}>0">
-				<!-- 새로 작성하는 경우임 -->
-				<table class="table">
-					<tbody th:unless="${board.boardIdx}>0">
-						<tr>
-							<th scope="row">title</th>
-							<td>
-								<input type="text" class="form-control" th:field="*{title}" id="title">
-								<div class="invalid-feedback">
-							    	한글자 이하거나, 공백만 있는경우 불가
-							    </div>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">contents</th>							
-							<td colspan="5">
-								<textarea class="form-control" id="contents"  th:field="*{contents}" rows="8"></textarea>
-								<div class="invalid-feedback">
-							    	한글자 이하거나, 공백만 있는경우 불가
-							    </div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="text-right">
-					<a class="btn btn-danger" th:href="@{/board/list}">CANCEL</a>
-					<button type="submit" id="submitBtn" class="btn btn-primary">SAVE</button>
-				</div>
-			</form>
+			</th:block>
+			<th:block th:unless="${board.boardIdx}>0">
+				<form method="post" onsubmit="finalChk()" th:action="@{/board/write}" th:object="${board}">
+					<!-- 새로 작성하는 경우임 -->
+					<table class="table">
+						<tbody th:unless="${board.boardIdx}>0">
+							<tr>
+								<th scope="row">title</th>
+								<td>
+									<input type="text" class="form-control" th:field="*{title}" id="title">
+									<div class="invalid-feedback">
+								    	한글자 이하거나, 공백만 있는경우 불가
+								    </div>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">contents</th>							
+								<td colspan="5">
+									<textarea class="form-control" id="contents"  th:field="*{contents}" rows="8"></textarea>
+									<div class="invalid-feedback">
+								    	한글자 이하거나, 공백만 있는경우 불가
+								    </div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="text-right">
+						<a class="btn btn-danger" th:href="@{/board/list}">CANCEL</a>
+						<button type="submit" id="submitBtn" class="btn btn-primary">SAVE</button>
+					</div>
+				</form>
+			</th:block>
 		</div>
 	</div>
 
@@ -173,6 +210,6 @@
 			method.innerHTML = '<input type="hidden" name="_method" value="delete"/>';
 			form.submit();
 		}
-		
+ 	
 	</script>
 </html>

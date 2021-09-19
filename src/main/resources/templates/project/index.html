@@ -15,9 +15,21 @@
 			All you get is this text and a mostly barebones HTML document.
 		</p>
 	</div>
-
+	<div id="err"></div>
 	</main>
-	<!-- /.container -->
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script th:inline="javascript">
+		window.onload = function(){
+			/*<![CDATA[*/
+			var err = "[[${err}]]";
+		        if(err == "true"){
+		        	alert("err occured!! ");
+		        	err="";
+		        }
+			/*]]>*/
+		}
+	</script>
+	
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
 		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
 		crossorigin="anonymous"></script>
@@ -27,4 +39,5 @@
 						.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')
 	</script>
 	<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+	
 </html>

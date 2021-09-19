@@ -75,12 +75,15 @@ public class BoardController {
 	public ModelAndView write(HttpServletRequest request) throws Exception {
 		String boardIdx = request.getParameter("id");
 		ModelAndView mv = new ModelAndView("project/write");
+		
 		if (boardIdx != null) { // 파라미터값이 존재, 상세열람
 			mv.addObject("board", boardService.searchBoard(Integer.parseInt(boardIdx)));
+			mv.addObject("comment", boardService.searchComment(Integer.parseInt(boardIdx)));
 			boardService.addHitCnt(Integer.parseInt(boardIdx));
 		} else { // 파라미터값이 존재 X, 글쓰기
 			mv.addObject("board", new BoardDto());
 		}
+		//log.debug(mv.getModelMap().toString());
 		return mv;
 	}
 
@@ -91,11 +94,11 @@ public class BoardController {
 		User user = (User) auth.getPrincipal();
 
 		if (bindingResult.hasErrors()) {
-			log.debug(bindingResult.getFieldError() + "  dto 어노테이션서 에러 출현");
-			if (board.getBoardIdx() > 0)
-				return "redirect:/board/write?id=" + board.getBoardIdx();
-			else
-				return "redirect:/board/write";
+//			if (board.getBoardIdx() > 0)
+//				return "redirect:/board/write?id=" + board.getBoardIdx();
+//			else
+//				return "redirect:/board/write";
+			throw new Exception(bindingResult.getAllErrors().toString());
 		} else {
 			if (board.getBoardIdx() > 0) { // 파라미터값이 존재, 게시글 수정
 				if(isEqualUser(boardService.findCreator(board.getBoardIdx()), user.getUsername())) {
