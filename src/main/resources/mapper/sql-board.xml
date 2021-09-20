@@ -169,6 +169,18 @@
 			comment
 		WHERE
 			board_idx = #{boardIdx}
+			AND
+			deleted_yn = 'N'
 		ORDER BY comment_idx ASC
 	</select>
+	
+	<update id="deleteComment" parameterType="project.project.dto.CommentDto">
+		UPDATE 
+			comment
+		SET
+			deleted_yn = 'Y'
+		WHERE
+			comment_idx = #{commentIdx}
+	</update>
+	
 </mapper>

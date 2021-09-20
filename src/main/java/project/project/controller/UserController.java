@@ -52,6 +52,8 @@ public class UserController {
 		User user = (User) auth.getPrincipal();
 		if (StringUtils.isEmpty(recipient) && StringUtils.isEmpty(idx)) {
 			mv.addObject("title", "new Message");
+		} else if (!StringUtils.isEmpty(recipient) && StringUtils.isEmpty(idx)) {
+			mv.addObject("title", "To Msg");
 		} else {
 			// 보낸 메세지, 받은 메세지 페이지 추가 예정
 			log.debug(recipient + " : " + user.getUsername());

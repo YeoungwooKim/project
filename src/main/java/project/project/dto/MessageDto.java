@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 public class MessageDto {
 	@NotNull
 	private int idx;
-	@NotBlank
 	private String sender;
 	@NotBlank
 	private String recipient;

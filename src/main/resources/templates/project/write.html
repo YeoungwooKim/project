@@ -72,12 +72,23 @@
 					<table class="table" th:if="${#lists.size(comment)} >0 ">
 						<th:block th:each="comment : ${comment}">
 							<tr>
-								<td class="w-25" th:text="${comment.creatorId}"> </td>
+								<td class="w-25" > 
+									<div class="btn-group">
+										<button type="button" th:text="${comment.creatorId}" class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										</button>
+										<div class="dropdown-menu">
+											<a class="dropdown-item" th:href="@{/message(recipient=${comment.creatorId})}"
+												onClick="window.open(this.href, '', 'width=550, height=700');  return false;">post message</a>
+										</div>
+									</div>
+								</td>
 								<td colspan="2" th:text="${comment.contents}">comment contents</td>
 								<td class="text-right" >
-									<form>
+									<form th:action="@{/comment}" method="post">
 										<input type="hidden" name="creatorId" th:value="${comment.creatorId}">
 										<input type="hidden" name="commentIdx" th:value="${comment.commentIdx}">
+										<input type="hidden" name="boardIdx" th:value="${board.boardIdx}">
+	        							<input type="hidden" name="_method" value="DELETE"/>
 										<button type="submit" class="btn btn-outline-warning">delete</button>
 									</form>
 								</td>
@@ -91,16 +102,16 @@
 					<table class="table" th:unless="${#lists.size(comment)} >0 ">
 						<h3> There's no comment in this board...</h3>
 					</table>
-					<details class="mx-3">
-						<summary> Write comment</summary>
+					<details class="mx-3" open>
+						<summary><h4> Write comment</h4></summary>
 						<table class="table">
 							<tbody>
 								<tr>
-									<form th:action="@{/commentPost}" method="post">
+									<form th:action="@{/comment}" method="post">
 										<td sec:authentication="name" class="w-25"></td>
 										<input type="hidden" name="boardIdx" th:value="${board.boardIdx}">
 										<td class="w-50"><textarea name="contents" class="form-control" rows="3" ></textarea></td>
-										<td ><button type="submit" class="w-50"> submit </button></td>
+										<td ><button type="submit" class="btn btn-outline-success w-50"> submit </button></td>
 									</form>
 								</tr>
 							</tbody>

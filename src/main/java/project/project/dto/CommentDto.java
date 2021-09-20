@@ -15,4 +15,5 @@ public class CommentDto {
 	@NotBlank
 	private String contents;
 	private String createdDate;
+	private String deletedYn;
 }

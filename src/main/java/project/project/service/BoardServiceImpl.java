@@ -77,4 +77,9 @@ public class BoardServiceImpl implements BoardService {
 	public List<CommentDto> searchComment(int boardIdx) throws Exception {
 		return boardMapper.searchComment(boardIdx);
 	}
+
+	@Override
+	public void deleteComment(CommentDto comment) throws Exception {
+		boardMapper.deleteComment(comment);
+	}
 }

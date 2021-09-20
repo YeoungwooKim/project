@@ -9,46 +9,70 @@
 	</nav>
 	<h3 class="mx-3" th:text="${title}"></h3>
 	<th:block th:if="${#httpServletRequest.getParameter('recipient')} != null"> 
-		<ul class="list-group mx-3">
-			<small class="text-right" th:text="${msg.postDate}"> </small>
-			<li class="list-group-item">
-				<strong>subject :</strong>
-				<span th:text="| ${msg.title}|"></span> 
-			</li>
-			<li class="list-group-item">
-				<strong>from :</strong>
-				<span th:text="| ${msg.sender} |"></span>
-			</li>
-			<li class="list-group-item">
-				<strong> contents : </strong>
-				<span th:text="| ${msg.content}|"></span>
-			</li>
-		</ul> 
-		<details class="mx-3">
-			<summary th:text="|reply...?|"></summary>
-		  	<form th:action="@{/message}" method="post" id="form">
-			<ul class="list-group">
+		<th:block th:if="${#httpServletRequest.getParameter('idx')} != null">
+			<ul class="list-group mx-3">
+				<small class="text-right" th:text="${msg.postDate}"> </small>
 				<li class="list-group-item">
-					<input type="text" id="msgTitle" class="form-control" name="title" placeholder=" title">
+					<strong>subject :</strong>
+					<span th:text="| ${msg.title}|"></span> 
 				</li>
-				<th:block th:if="${#httpServletRequest.getParameter('recipient')} == null">
+				<li class="list-group-item">
+					<strong>from :</strong>
+					<span th:text="| ${msg.sender} |"></span>
+				</li>
+				<li class="list-group-item">
+					<strong> contents : </strong>
+					<span th:text="| ${msg.content}|"></span>
+				</li>
+			</ul> 
+			<details class="mx-3">
+				<summary th:text="|reply...?|"></summary>
+			  	<form th:action="@{/message}" method="post" id="form">
+				<ul class="list-group">
 					<li class="list-group-item">
-						<input type="text" id="msgRecipient" class="form-control" name="recipient" placeholder=" recipient">
+						<input type="text" id="msgTitle" class="form-control" name="title" placeholder=" title">
 					</li>
-				</th:block>
-				<li class="list-group-item">
-					<textarea id="msgContent" name="content" class="form-control" placeholder=" contents" rows="3"></textarea>
-				</li>
-				<li class="list-group-item text-right mb-n2"> 
-					<button type="submit"  class="btn btn-success">Send</button>
-				</li>
-				<input type="hidden" name="recipient" th:value="${msg.sender}">
-			</ul>
+					<th:block th:if="${#httpServletRequest.getParameter('recipient')} == null">
+						<li class="list-group-item">
+							<input type="text" id="msgRecipient" class="form-control" name="recipient" placeholder=" recipient">
+						</li>
+					</th:block>
+					<li class="list-group-item">
+						<textarea id="msgContent" name="content" class="form-control" placeholder=" contents" rows="3"></textarea>
+					</li>
+					<li class="list-group-item text-right mb-n2"> 
+						<button type="submit"  class="btn btn-success">Send</button>
+					</li>
+					<input type="hidden" name="recipient" th:value="${msg.sender}">
+				</ul>
+				</form>
+			</details>
+			<div class="text-left mx-3 text-muted">
+				<small id="time"> </small>
+			</div>
+		
+		</th:block>
+		<th:block th:unless="${#httpServletRequest.getParameter('idx')} != null">
+			<form th:action="@{/message}" method="post" id="form">
+				<ul class="list-group mx-3" >
+					<li class="list-group-item">
+						<input type="text" id="title" class="form-control" name="title" placeholder=" title">
+					</li>
+					<li class="list-group-item">
+						<input type="text" th:value="${#httpServletRequest.getParameter('recipient')}" class="form-control" name="recipient" placeholder=" recipient">
+					</li>
+					<li class="list-group-item">
+						<textarea id="contents" name="content" class="form-control" placeholder=" contents" rows="3"></textarea>
+					</li>
+					<li class="list-group-item text-right mb-n2"> 
+						<button type="submit"  class="btn btn-success">Send</button>
+					</li>
+				</ul>
+				<div class="text-left mx-3 text-muted">
+					<small id="time"> </small>
+				</div>
 			</form>
-		</details>
-		<div class="text-left mx-3 text-muted">
-			<small id="time"> </small>
-		</div>
+		</th:block>
 	</th:block>
 	<th:block th:unless="${#httpServletRequest.getParameter('recipient')} != null"> 
 		<form th:action="@{/message}" method="post" id="form">

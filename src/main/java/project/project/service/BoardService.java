@@ -33,4 +33,6 @@ public interface BoardService {
 	void addComment(CommentDto comment) throws Exception;
 	
 	List<CommentDto> searchComment(int boardIdx) throws Exception;
+
+	void deleteComment(CommentDto comment) throws Exception;
 }
