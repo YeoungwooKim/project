@@ -35,9 +35,9 @@ public class ExceptionHandler {
 		} else {
 			mv.setViewName("project/index");
 			mv.addObject("err", true);
-			//pushMsg("root", exception);
+			pushMsg("root", exception);
 		}
-		pushMsg("root", exception);
+		//pushMsg("root", exception);
 		
 		return mv;
 	}

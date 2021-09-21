@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -147,7 +148,16 @@ public class UserController {
 		mv.addObject("user", null);
 		return mv;
 	}
-
+	
+	@PostMapping("/idCheck")
+	public @ResponseBody String idCheck(UserDto user) throws Exception {
+		if(userService.checkUser(user)) {
+			return "you can use it!";
+		} else {
+			return "you can't use it!";
+		}
+	}
+	
 	@PostMapping("/register")
 	public String register(UserDto user) throws Exception {
 		ModelAndView mv = new ModelAndView("project/register");

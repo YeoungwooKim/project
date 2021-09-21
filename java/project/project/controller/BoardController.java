@@ -70,18 +70,20 @@ public class BoardController {
 		return mv;
 	}
 	
+	
 
 	@GetMapping("/write")
 	public ModelAndView write(HttpServletRequest request) throws Exception {
 		String boardIdx = request.getParameter("id");
 		ModelAndView mv = new ModelAndView("project/write");
-		
 		if (boardIdx != null) { // 파라미터값이 존재, 상세열람
 			mv.addObject("board", boardService.searchBoard(Integer.parseInt(boardIdx)));
 			mv.addObject("comment", boardService.searchComment(Integer.parseInt(boardIdx)));
+			mv.addObject("title", "details");
 			boardService.addHitCnt(Integer.parseInt(boardIdx));
 		} else { // 파라미터값이 존재 X, 글쓰기
 			mv.addObject("board", new BoardDto());
+			mv.addObject("title", "write");
 		}
 		//log.debug(mv.getModelMap().toString());
 		return mv;

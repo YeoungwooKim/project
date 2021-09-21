@@ -1,10 +1,11 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="/fragments/common :: head">
 </head>
+
 <body id="body">
-	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"
-		th:replace="/fragments/common :: menu"></nav>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="/fragments/common :: menu"></nav>
 
 	<div class="container ">
 		<div th:if="${board.boardIdx}>0">
@@ -14,11 +15,7 @@
 			<h2>게시글 작성</h2>
 		</div>
 		<div>
-			
-			<!-- <div>
-				<span th:text="${board}"></span>
-			</div>   -->
-			<th:block th:if="${board.boardIdx}>0" >
+			<th:block th:if="${board.boardIdx}>0">
 				<form method="post" onsubmit="finalChk()" th:action="@{/board/write}" th:object="${board}" id="form">
 					<!-- 작성된거 열람 및 수정하는 경우임 -->
 					<table class="table">
@@ -36,23 +33,25 @@
 								<td colspan="4">
 									<input type="text" class="form-control" th:field="*{title}" id="title">
 									<div class="invalid-feedback">
-								    	한글자 이하거나, 공백만 있는경우 불가
-								    </div>
+										한글자 이하거나, 공백만 있는경우 불가
+									</div>
 								</td>
-								<th> 
+								<th>
 									<div class="input-group mb-3 ">
-									  <span class="input-group-text">Index</span>
-									  <input type="text" class="form-control" th:field="*{boardIdx}"  th:readonly="${1}">
+										<span class="input-group-text">Index</span>
+										<input type="text" class="form-control" th:field="*{boardIdx}"
+											th:readonly="${1}">
 									</div>
 								</th>
 							</tr>
 							<tr>
 								<th scope="row">contents</th>
 								<td colspan="5">
-									<textarea class="form-control" id="contents"  th:field="*{contents}" rows="8"></textarea>
+									<textarea class="form-control" id="contents" th:field="*{contents}"
+										rows="8"></textarea>
 									<div class="invalid-feedback">
-								    	한글자 이하거나, 공백만 있는경우 불가
-								    </div>
+										한글자 이하거나, 공백만 있는경우 불가
+									</div>
 								</td>
 							</tr>
 						</tbody>
@@ -63,60 +62,82 @@
 						<button type="submit" id="submitBtn" class="btn btn-primary">SAVE</button>
 					</div>
 					<div id="method">
-						
+
 					</div>
 				</form>
-		       
-				<div>	
+
+				<div id="resultDiv">
 					<h3 class="my-3"> Comment </h3>
-					<table class="table" th:if="${#lists.size(comment)} >0 ">
-						<th:block th:each="comment : ${comment}">
-							<tr>
-								<td class="w-25" > 
+					<th:block th:each="comment : ${comment}">
+						<div class="card w-100 mb-2">
+							<div class="card-body">
+								<h5 style="display: inline-block;" class="card-title w-50">
 									<div class="btn-group">
-										<button type="button" th:text="${comment.creatorId}" class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										<button type="button" th:text="${comment.creatorId}"
+											class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown"
+											aria-haspopup="true" aria-expanded="false">
 										</button>
 										<div class="dropdown-menu">
-											<a class="dropdown-item" th:href="@{/message(recipient=${comment.creatorId})}"
-												onClick="window.open(this.href, '', 'width=550, height=700');  return false;">post message</a>
+											<a class="dropdown-item"
+												th:href="@{/message(recipient=${comment.creatorId})}"
+												onClick="window.open(this.href, '', 'width=550, height=700');  return false;">post
+												message</a>
 										</div>
 									</div>
-								</td>
-								<td colspan="2" th:text="${comment.contents}">comment contents</td>
-								<td class="text-right" >
+								</h5>
+								<div style="display: inline-block;" class="card-title float-right  ">
 									<form th:action="@{/comment}" method="post">
 										<input type="hidden" name="creatorId" th:value="${comment.creatorId}">
 										<input type="hidden" name="commentIdx" th:value="${comment.commentIdx}">
 										<input type="hidden" name="boardIdx" th:value="${board.boardIdx}">
-	        							<input type="hidden" name="_method" value="DELETE"/>
-										<button type="submit" class="btn btn-outline-warning">delete</button>
+										<input type="hidden" name="_method" value="DELETE" />
+										<button type="submit" class="btn btn-outline-danger ">
+											<i class="fas fa-trash-alt"></i>
+										</button>
 									</form>
-								</td>
-							</tr>
-							<tr class="text-muted">
-								<td colspan="4" th:text="${comment.createdDate}" class="text-right"> </td>	
-							</tr>
-							<tr><td colspan="4"></td></tr>
-						</th:block>
-					</table>
-					<table class="table" th:unless="${#lists.size(comment)} >0 ">
-						<h3> There's no comment in this board...</h3>
-					</table>
-					<details class="mx-3" open>
-						<summary><h4> Write comment</h4></summary>
-						<table class="table">
-							<tbody>
-								<tr>
-									<form th:action="@{/comment}" method="post">
-										<td sec:authentication="name" class="w-25"></td>
-										<input type="hidden" name="boardIdx" th:value="${board.boardIdx}">
-										<td class="w-50"><textarea name="contents" class="form-control" rows="3" ></textarea></td>
-										<td ><button type="submit" class="btn btn-outline-success w-50"> submit </button></td>
-									</form>
-								</tr>
-							</tbody>
-						</table>
-					</details>
+								</div>
+								<h6 class="card-subtitle mb-2 text-muted " th:text="${comment.createdDate}"> </h6>
+								<p class="card-text my-3" th:text="${comment.contents}"></p>
+							</div>
+						</div>
+					</th:block>
+					<!-- <h3 class="my-3"> Write </h3>
+					<div class="card w-50 mb-2">
+						<div class="card-body">
+							<form th:action="@{/comment}" method="post">
+								<strong> 
+									<span sec:authentication="name"></span> 
+								</strong>
+								<button type="submit" class="btn btn-outline-info btn-lg float-right">
+									<i class="far fa-save"></i>
+								</button>
+								<input type="hidden" name="boardIdx" th:value="${board.boardIdx}">
+								<hr class="mt-5">
+										
+								<textarea rows="5" cols="50" name="contents" class=" w-100"> </textarea>
+							</form>
+						</div>
+					</div> -->
+
+					<h3 class="my-3"> Write </h3>
+					<div class="card w-50 mb-2">
+						<div class="card-body">
+							<!-- <form th:action="@{/comment}" method="post"> -->
+								<strong> 
+									<span sec:authentication="name"></span> 
+								</strong>
+								<button type="button" onclick="postComment()"
+									class="btn btn-outline-info btn-lg float-right">
+									<i class="far fa-save"></i>
+								</button>
+								<input type="hidden" id="boardIdx" name="boardIdx" th:value="${board.boardIdx}">
+								<hr class="mt-5">
+										
+								<textarea rows="5" cols="50" id="content" name="content" class=" w-100"> </textarea>
+							<!-- </form> -->
+						</div>
+					</div>
+
 				</div>
 			</th:block>
 			<th:block th:unless="${board.boardIdx}>0">
@@ -129,17 +150,18 @@
 								<td>
 									<input type="text" class="form-control" th:field="*{title}" id="title">
 									<div class="invalid-feedback">
-								    	한글자 이하거나, 공백만 있는경우 불가
-								    </div>
+										한글자 이하거나, 공백만 있는경우 불가
+									</div>
 								</td>
 							</tr>
 							<tr>
-								<th scope="row">contents</th>							
+								<th scope="row">contents</th>
 								<td colspan="5">
-									<textarea class="form-control" id="contents"  th:field="*{contents}" rows="8"></textarea>
+									<textarea class="form-control" id="contents" th:field="*{contents}"
+										rows="8"></textarea>
 									<div class="invalid-feedback">
-								    	한글자 이하거나, 공백만 있는경우 불가
-								    </div>
+										한글자 이하거나, 공백만 있는경우 불가
+									</div>
 								</td>
 							</tr>
 						</tbody>
@@ -154,73 +176,100 @@
 	</div>
 
 	<!-- /.container -->
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-		crossorigin="anonymous"></script>
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<script>
-		window.jQuery
-				|| document
-						.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')
+		function postComment(){
+			var str_json = {
+				commentDto :  {
+					boardIdx : $("#boardIdx").val(),
+					contents : $("#content").val()
+				},
+				url : window.location.pathname +  window.location.search
+			}
+			
+			$.ajax({
+				url: "/commentAJAX",
+				contentType: 'application/json',
+				data:  JSON.stringify(str_json),
+				type: "post",
+				dataType : "text",
+				beforeSend: function (jqXHR, settings) {
+					var header = $("meta[name='_csrf_header']").attr("content");
+					var token = $("meta[name='_csrf']").attr("content");
+					jqXHR.setRequestHeader(header, token);
+				},
+				success : function(e){
+					console.log(e);
+				},
+				error : function(e){
+					console.log(e);
+				}
+			}).done(function (fragment) {
+				$("#resultDiv").replaceWith(fragment);
+				console.log(fragment);
+			})
+		}
 	</script>
-	<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+	<script th:src="@{/assets/dist/js/bootstrap.bundle.min.js}"></script>
 	<script>
 		var title = document.getElementById("title");
 		var contents = document.getElementById("contents");
 		var submit = document.getElementById("submitBtn");
 		var body = document.getElementById("body");
-		
+
 		submit.addEventListener('mouseover', (event) => {
-			if(!valueChk(title.value)){
-				if(!valueChk(contents.value)){
+			if (!valueChk(title.value)) {
+				if (!valueChk(contents.value)) {
 					submit.disabled = false;
 				}
 			}
 		});
-		
+
 		body.addEventListener('mouseover', (event) => {
-			if(valueChk(title.value)){
+			if (valueChk(title.value)) {
 				title.className = 'form-control is-invalid';
 				submit.disabled = true;
 			} else {
 				title.className = 'form-control';
 			}
-			
-			if(valueChk(contents.value)){
+
+			if (valueChk(contents.value)) {
 				contents.className = 'form-control is-invalid';
 				submit.disabled = true;
 			} else {
 				contents.className = 'form-control';
 			}
-			
-			if(!valueChk(title.value) && !valueChk(contents.value)){
+
+			if (!valueChk(title.value) && !valueChk(contents.value)) {
 				submit.disabled = false;
-			} 
+			}
 		});
-		
-		function valueChk(str){
-			if(str.length < 1 || str.trim() == ''){
+
+		function valueChk(str) {
+			if (str.length < 1 || str.trim() == '') {
 				return true;
 			} else {
 				return false;
 			}
 		}
-		
+
 		function finalChk() {
-			if(valueChk(title.value)){
+			if (valueChk(title.value)) {
 				window.location.reload(true);
-				alert('title err \n inserted value : "' + title.value+'"'); 
-			} else if(valueChk(contents.value)){
+				alert('title err \n inserted value : "' + title.value + '"');
+			} else if (valueChk(contents.value)) {
 				window.location.reload(true);
-				alert('contents err \n inserted value : "' + contents.value+'"'); 
-			} 
-		} 
-		
-		function methodChange(){
+				alert('contents err \n inserted value : "' + contents.value + '"');
+			}
+		}
+
+		function methodChange() {
 			var method = document.getElementById("method");
 			var form = document.getElementById("form");
 			method.innerHTML = '<input type="hidden" name="_method" value="delete"/>';
 			form.submit();
 		}
- 	
+
 	</script>
+
 </html>
