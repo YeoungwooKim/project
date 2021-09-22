@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="project.project.mapper.GameMapper"> 
+	<select id="showList" resultType="project.project.dto.GameDto">
+		<![CDATA[
+			SELECT
+				idx, game_title, created_date, played_cnt
+			FROM
+				game
+		]]>
+	</select>
+	<select id="searchByIdx" parameterType="int" resultType="string">
+		<![CDATA[
+			SELECT
+				game_title
+			FROM
+				game
+			WHERE
+				idx = #{idx}
+		]]>
+	</select>
+</mapper>

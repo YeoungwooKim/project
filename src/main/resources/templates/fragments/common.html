@@ -1,98 +1,99 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head th:fragment="head">
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author"
-	content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-<meta name="generator" content="Jekyll v4.1.1">
-	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
-<title th:text="${title}"></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+	<meta name="generator" content="Jekyll v4.1.1">
+	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}" />
+	<title th:text="${title}"></title>
 
-<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/starter-template/">
-<link th:href="@{/assets/dist/css/bootstrap.min.css}" rel="stylesheet">
+	<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/starter-template/">
+	<link th:href="@{/assets/dist/css/bootstrap.min.css}" rel="stylesheet">
 
-<!-- Custom styles for this template -->
-<link th:href="@{/css/starter-template.css}" rel="stylesheet">
-    <!-- Custom styles for this template -->
-<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/starter-template/">
-<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/pricing/">
-<script src="https://kit.fontawesome.com/7fd4b424d0.js" crossorigin="anonymous"></script>
-        
+	<!-- Custom styles for this template -->
+	<link th:href="@{/css/starter-template.css}" rel="stylesheet">
+	<!-- Custom styles for this template -->
+	<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/starter-template/">
+	<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/pricing/">
+	<script src="https://kit.fontawesome.com/7fd4b424d0.js" crossorigin="anonymous"></script>
+
 </head>
+
 <body>
-	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"
-		th:fragment="menu">
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:fragment="menu">
 		<a class="navbar-brand" href="/">Springboot Tutorial</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse"
-			data-target="#navbarsExampleDefault"
-			aria-controls="navbarsExampleDefault" aria-expanded="false"
-			aria-label="Toggle navigation">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+			aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 
 		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item " th:classappend="${title}=='Index'? 'active'">
-					<a class="nav-link" href="/"> Home <span class="sr-only"
-						th:if="${title}=='Index'">(current)</span>
-				</a>
+					<a class="nav-link" href="/"> Home <span class="sr-only" th:if="${title}=='Index'">(current)</span>
+					</a>
 				</li>
 				<li class="nav-item " th:classappend="${title}=='Board'? 'active'">
-					<a class="nav-link" href="/board/list?currentPage=0"> Board <span
-						class="sr-only" th:if="${title}=='Board'">(current)</span>
-				</a>
+					<a class="nav-link" href="/board/list?currentPage=0"> Board <span class="sr-only"
+							th:if="${title}=='Board'">(current)</span>
+					</a>
 				</li>
-
+				<li class="nav-item " th:classappend="${title}=='Games'? 'active'">
+					<a class="nav-link" href="/games"> Games <span class="sr-only" th:if="${title}=='Games'">(current)</span>
+					</a>
+				</li>
 			</ul>
 			<div class="text-light">
-				Hello, 
-				<span sec:authentication="name"></span> 
+				Hello,
+				<span sec:authentication="name"></span>
 			</div>
 			&nbsp;&nbsp;
 			<div class="dropdown" th:if="${title}!=mypage ">
-				<a class="btn btn-secondary btn-lg nav-link dropdown-toggle" id="dropdownMenuButton1" 
+				<a class="btn btn-secondary btn-lg nav-link dropdown-toggle" id="dropdownMenuButton1"
 					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More Info</a>
 				<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-					<li><a class="dropdown-item" th:href="@{/mypage}" sec:authorize="isAuthenticated()"> My Page</a></li>
-					<li><a class="dropdown-item" th:href="@{/myMessage}" sec:authorize="isAuthenticated()"> Message box</a></li>
+					<li><a class="dropdown-item" th:href="@{/mypage}" sec:authorize="isAuthenticated()"> My Page</a>
+					</li>
+					<li><a class="dropdown-item" th:href="@{/myMessage}" sec:authorize="isAuthenticated()"> Message
+							box</a></li>
 					<th:block sec:authorize="isAuthenticated()">
 						<li>
 							<hr class="dropdown-divider">
 						</li>
 						<li>
-							<a class="dropdown-item" th:href="@{/logout}" >
-								Log-out 
+							<a class="dropdown-item" th:href="@{/logout}">
+								Log-out
 							</a>
 						</li>
 					</th:block>
-					<th:block  sec:authorize="!isAuthenticated()">
+					<th:block sec:authorize="!isAuthenticated()">
 						<li>
 							<a class="dropdown-item" th:href="@{/login}">
-								Log-in 
+								Log-in
 							</a>
-							<a class="dropdown-item"  th:href="@{/register}">
-								Register 
+							<a class="dropdown-item" th:href="@{/register}">
+								Register
 							</a>
 						</li>
 					</th:block>
-					
+
 				</ul>
 			</div>
 			<div th:unless="${title}!=mypage ">
 				<a class="btn btn-secondary btn-lg" th:href="@{/logout}" sec:authorize="isAuthenticated()">
-					Log-out 
+					Log-out
 				</a>
 			</div>
 			<!-- </div>		 -->
 
 		</div>
-		
+
 	</nav>
 
 </body>
+
 </html>

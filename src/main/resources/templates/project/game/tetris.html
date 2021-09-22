@@ -1,0 +1,35 @@
+<div th:fragment="tetris">
+    <div class="grid">
+        <canvas id="board" class="game-board"></canvas>
+        <div class="right-column">
+            <div>
+                <h1>TETRIS</h1>
+                <p>Score: <span id="score">0</span></p>
+                <p>Lines: <span id="lines">0</span></p>
+                <p>Level: <span id="level">0</span></p>
+                <canvas id="next" class="next"></canvas>
+            </div>
+
+            <button onclick="userInit()" class="play-button">Play</button>
+        </div>
+    </div>
+
+    <link th:href="@{/css/tetStyle.css}" rel="stylesheet">
+
+    <script th:src="@{/js/board.js}"></script>
+    <script th:src="@{/js/const.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/piece.js}"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            //바둑판 모양 그리기
+            ctx.strokeStyle = 'silver';
+            ctx.lineWidth = 0.01;
+            for (var c = 0; c <= endX; c++) {
+                for (var r = 0; r <= endY; r++) {
+                    ctx.strokeRect(c, r, 1, 1);
+                }
+            }
+        }
+    </script>
+</div>

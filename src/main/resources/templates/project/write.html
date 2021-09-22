@@ -66,76 +66,65 @@
 					</div>
 				</form>
 
-				<div id="resultDiv">
+				<div class="mt-5">
 					<h3 class="my-3"> Comment </h3>
-					<th:block th:each="comment : ${comment}">
-						<div class="card w-100 mb-2">
-							<div class="card-body">
-								<h5 style="display: inline-block;" class="card-title w-50">
-									<div class="btn-group">
-										<button type="button" th:text="${comment.creatorId}"
-											class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown"
-											aria-haspopup="true" aria-expanded="false">
-										</button>
-										<div class="dropdown-menu">
-											<a class="dropdown-item"
-												th:href="@{/message(recipient=${comment.creatorId})}"
-												onClick="window.open(this.href, '', 'width=550, height=700');  return false;">post
-												message</a>
+					<th:block th:if="${#lists.size(comment)} > 0">
+						<th:block th:each="comment : ${comment}">
+							<div class="card w-100 mb-2">
+								<div class="card-body">
+									<h5 style="display: inline-block;" class="card-title w-50">
+										<div class="btn-group">
+											<button type="button" th:text="${comment.creatorId}"
+												class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown"
+												aria-haspopup="true" aria-expanded="false">
+											</button>
+											<div class="dropdown-menu">
+												<a class="dropdown-item"
+													th:href="@{/message(recipient=${comment.creatorId})}"
+													onClick="window.open(this.href, '', 'width=550, height=700');  return false;">post
+													message</a>
+											</div>
 										</div>
+									</h5>
+									<div style="display: inline-block;" class="card-title float-right  ">
+										<form th:action="@{/comment}" method="post">
+											<input type="hidden" name="creatorId" th:value="${comment.creatorId}">
+											<input type="hidden" name="commentIdx" th:value="${comment.commentIdx}">
+											<input type="hidden" name="boardIdx" th:value="${board.boardIdx}">
+											<input type="hidden" name="_method" value="DELETE" />
+											<button type="submit" class="btn btn-outline-danger ">
+												<i class="fas fa-trash-alt"></i>
+											</button>
+										</form>
 									</div>
-								</h5>
-								<div style="display: inline-block;" class="card-title float-right  ">
-									<form th:action="@{/comment}" method="post">
-										<input type="hidden" name="creatorId" th:value="${comment.creatorId}">
-										<input type="hidden" name="commentIdx" th:value="${comment.commentIdx}">
-										<input type="hidden" name="boardIdx" th:value="${board.boardIdx}">
-										<input type="hidden" name="_method" value="DELETE" />
-										<button type="submit" class="btn btn-outline-danger ">
-											<i class="fas fa-trash-alt"></i>
-										</button>
-									</form>
+									<h6 class="card-subtitle mb-2 text-muted " th:text="${comment.createdDate}"> </h6>
+									<p class="card-text my-3" th:text="${comment.contents}"></p>
 								</div>
-								<h6 class="card-subtitle mb-2 text-muted " th:text="${comment.createdDate}"> </h6>
-								<p class="card-text my-3" th:text="${comment.contents}"></p>
 							</div>
-						</div>
+						</th:block>
 					</th:block>
-					<!-- <h3 class="my-3"> Write </h3>
-					<div class="card w-50 mb-2">
-						<div class="card-body">
-							<form th:action="@{/comment}" method="post">
-								<strong> 
-									<span sec:authentication="name"></span> 
-								</strong>
-								<button type="submit" class="btn btn-outline-info btn-lg float-right">
-									<i class="far fa-save"></i>
-								</button>
-								<input type="hidden" name="boardIdx" th:value="${board.boardIdx}">
-								<hr class="mt-5">
-										
-								<textarea rows="5" cols="50" name="contents" class=" w-100"> </textarea>
-							</form>
-						</div>
-					</div> -->
+					<th:block th:unless="${#lists.size(comment)} > 0">
+						<h4 class="mt-3">There's no message in this board..</h4>
+					</th:block>
 
-					<h3 class="my-3"> Write </h3>
-					<div class="card w-50 mb-2">
-						<div class="card-body">
-							<!-- <form th:action="@{/comment}" method="post"> -->
-								<strong> 
-									<span sec:authentication="name"></span> 
-								</strong>
-								<button type="button" onclick="postComment()"
-									class="btn btn-outline-info btn-lg float-right">
-									<i class="far fa-save"></i>
-								</button>
-								<input type="hidden" id="boardIdx" name="boardIdx" th:value="${board.boardIdx}">
-								<hr class="mt-5">
-										
-								<textarea rows="5" cols="50" id="content" name="content" class=" w-100"> </textarea>
-							<!-- </form> -->
-						</div>
+					<div class="mt-3">
+						<h3 class="my-3"> Write </h3>
+						<div class="card w-50 mb-2">
+							<div class="card-body">
+								<form th:action="@{/comment}" method="post">
+									<strong> 
+										<span sec:authentication="name"></span> 
+									</strong>
+									<button type="submit" class="btn btn-outline-info btn-lg float-right">
+										<i class="far fa-save"></i>
+									</button>
+									<input type="hidden" name="boardIdx" th:value="${board.boardIdx}">
+									<hr class="mt-5">
+											
+									<textarea rows="5" cols="50" name="contents" class=" w-100"> </textarea>
+								</form>
+							</div>
+						</div> 
 					</div>
 
 				</div>
@@ -177,39 +166,7 @@
 
 	<!-- /.container -->
 	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-	<script>
-		function postComment(){
-			var str_json = {
-				commentDto :  {
-					boardIdx : $("#boardIdx").val(),
-					contents : $("#content").val()
-				},
-				url : window.location.pathname +  window.location.search
-			}
-			
-			$.ajax({
-				url: "/commentAJAX",
-				contentType: 'application/json',
-				data:  JSON.stringify(str_json),
-				type: "post",
-				dataType : "text",
-				beforeSend: function (jqXHR, settings) {
-					var header = $("meta[name='_csrf_header']").attr("content");
-					var token = $("meta[name='_csrf']").attr("content");
-					jqXHR.setRequestHeader(header, token);
-				},
-				success : function(e){
-					console.log(e);
-				},
-				error : function(e){
-					console.log(e);
-				}
-			}).done(function (fragment) {
-				$("#resultDiv").replaceWith(fragment);
-				console.log(fragment);
-			})
-		}
-	</script>
+	
 	<script th:src="@{/assets/dist/js/bootstrap.bundle.min.js}"></script>
 	<script>
 		var title = document.getElementById("title");

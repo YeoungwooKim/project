@@ -1,5 +1,6 @@
 package project.project.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -32,28 +34,6 @@ public class CommentController {
 
 	@Autowired
 	private BoardService boardService;
-
-	@RequestMapping(value = "/commentAJAX", method = RequestMethod.POST, produces = "application/json; charset=utf8")
-	public String commentPostAjax(@RequestBody Map<String, Object> param, Model model) throws Exception {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = (User) auth.getPrincipal();
-		ObjectMapper objectMapper = new ObjectMapper();
-		String url = param.get("url").toString();
-		String dtoJson = objectMapper.writeValueAsString(param.get("commentDto"));
-		CommentDto comment = objectMapper.readValue(dtoJson, CommentDto.class);
-		comment.setCreatorId(user.getUsername());
-        String[] boardIdx = url.split("=");
-		
-		boardService.addComment(comment);
-		
-		log.debug("url : " + url);
-		log.debug("comment : " + comment.getBoardIdx() + " / " + comment.getContents());
-		
-		model.addAttribute("comment", boardService.searchComment(Integer.parseInt(boardIdx[boardIdx.length-1])));
-		
-		
-		return url + " :: #resultDiv";
-	}
 
 	@PostMapping("/comment")
 	public String commentPost(@Valid CommentDto comment, BindingResult bindingResult) throws Exception {
