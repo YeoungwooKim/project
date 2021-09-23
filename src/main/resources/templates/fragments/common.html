@@ -7,6 +7,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
 	<meta name="generator" content="Jekyll v4.1.1">
+	
 	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
 	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}" />
 	<title th:text="${title}"></title>
@@ -44,6 +45,10 @@
 				</li>
 				<li class="nav-item " th:classappend="${title}=='Games'? 'active'">
 					<a class="nav-link" href="/games"> Games <span class="sr-only" th:if="${title}=='Games'">(current)</span>
+					</a>
+				</li>
+				<li class="nav-item " th:classappend="${title}=='Rank'? 'active'">
+					<a class="nav-link" href="/rank"> Rank <span class="sr-only" th:if="${title}=='Rank'">(current)</span>
 					</a>
 				</li>
 			</ul>

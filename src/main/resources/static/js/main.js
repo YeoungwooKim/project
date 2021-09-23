@@ -389,24 +389,18 @@ function gameStopFunc(gameStop) {
 }
 
 function saveScore() {
-  var res = {
-    id: userId,
-    score: score,
-    clearedLines: clearedLines,
-    level: Math.floor(score / 100)
-  }
-  console.log(res);
   var user = null;
+  var str = window.location.href.split("/");
+  var url = window.location.pathname;
+
   user = {
     userId: userId,
-    score: score,
-    clearedLines: clearedLines,
-    level: Math.floor(score / 100),
-    game: 'tetris'
+    gameIdx: Number(str[str.length - 1]),
+    score: score
   }
-
+  console.log(user);
   $.ajax({
-    url: "/idCheck",
+    url: url,
     data: user,
     type: "post",
     beforeSend: function (jqXHR, settings) {
@@ -415,8 +409,8 @@ function saveScore() {
       jqXHR.setRequestHeader(header, token);
     }
   }).done(function (res) {
-    alert(res);
-    console.log(res);
+    alert('save complete');    
+    window.location.reload();
   })
 }
 

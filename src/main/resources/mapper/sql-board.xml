@@ -76,21 +76,23 @@
 		]]>
 	</update>
 	<select id="findBoardByTitle" resultType="project.project.dto.BoardDto">
-		SELECT
-				board_idx,
-				title,
-				contents,
-				hit_cnt,
-				creator_id,
-				DATE_FORMAT(created_date, '%Y.%m.%d %H:%i:%s') AS created_date,				
-				DATE_FORMAT(updated_date, '%Y.%m.%d %H:%i:%s') AS updated_date
-			FROM
-				board
-			WHERE
-				deleted_yn = 'N'
-				AND
-				title LIKE CONCAT('%',#{title},'%')
-			ORDER BY board_idx DESC
+		<![CDATA[
+			SELECT
+					board_idx,
+					title,
+					contents,
+					hit_cnt,
+					creator_id,
+					DATE_FORMAT(created_date, '%Y.%m.%d %H:%i:%s') AS created_date,				
+					DATE_FORMAT(updated_date, '%Y.%m.%d %H:%i:%s') AS updated_date
+				FROM
+					board
+				WHERE
+					deleted_yn = 'N'
+					AND
+					title LIKE CONCAT('%',#{title},'%')
+				ORDER BY board_idx DESC
+		]]>
 	</select>
 	<select id="getTotalRecord" resultType="int">
 		<![CDATA[
@@ -121,66 +123,73 @@
 		]]>
 	</update>
 	<select id="searchByCreator" parameterType="string" resultType="project.project.dto.BoardDto">
-		SELECT
-				board_idx,
-				title,
-				contents,
-				hit_cnt,
-				creator_id,
-				DATE_FORMAT(created_date, '%Y.%m.%d %H:%i:%s') AS created_date,				
-				DATE_FORMAT(updated_date, '%Y.%m.%d %H:%i:%s') AS updated_date
-			FROM
-				board
-			WHERE
-				deleted_yn = 'N'
-				AND
-				creator_id = #{creatorId}
-			ORDER BY board_idx DESC
+		<![CDATA[
+			SELECT
+					board_idx,
+					title,
+					contents,
+					hit_cnt,
+					creator_id,
+					DATE_FORMAT(created_date, '%Y.%m.%d %H:%i:%s') AS created_date,				
+					DATE_FORMAT(updated_date, '%Y.%m.%d %H:%i:%s') AS updated_date
+				FROM
+					board
+				WHERE
+					deleted_yn = 'N'
+					AND
+					creator_id = #{creatorId}
+				ORDER BY board_idx DESC
+		]]>
 	</select>
 	<insert id="addComment" parameterType="project.project.dto.CommentDto">
-		INSERT 
-			INTO comment ( 
-						board_idx, 
-						comment_idx, 
-						creator_id, 
-						contents, 
-						created_date 
-						)
-			SELECT 
-				#{boardIdx} as board_idx, 
-				IF(MAX(comment_idx) IS NULL, 1, max(comment_idx) + 1) as comment_idx,  
-				#{creatorId}, 
-				#{contents}, 
-				NOW()  
-			FROM 
-				comment 
-			WHERE 
-				board_idx = #{boardIdx}
+		<![CDATA[
+			INSERT 
+				INTO comment ( 
+							board_idx, 
+							comment_idx, 
+							creator_id, 
+							contents, 
+							created_date 
+							)
+				SELECT 
+					#{boardIdx} as board_idx, 
+					IF(MAX(comment_idx) IS NULL, 1, max(comment_idx) + 1) as comment_idx,  
+					#{creatorId}, 
+					#{contents}, 
+					NOW()  
+				FROM 
+					comment 
+				WHERE 
+					board_idx = #{boardIdx}
+		]]>
 	</insert>
 
 	<select id="searchComment" parameterType="int" resultType="project.project.dto.CommentDto">
-		SELECT
-			board_idx, 
-			comment_idx, 
-			creator_id, 
-			contents, 
-			created_date
-		FROM
-			comment
-		WHERE
-			board_idx = #{boardIdx}
-			AND
-			deleted_yn = 'N'
-		ORDER BY comment_idx ASC
+		<![CDATA[
+			SELECT
+				board_idx, 
+				comment_idx, 
+				creator_id, 
+				contents, 
+				created_date
+			FROM
+				comment
+			WHERE
+				board_idx = #{boardIdx}
+				AND
+				deleted_yn = 'N'
+			ORDER BY comment_idx ASC
+		]]>
 	</select>
 	
 	<update id="deleteComment" parameterType="project.project.dto.CommentDto">
-		UPDATE 
-			comment
-		SET
-			deleted_yn = 'Y'
-		WHERE
-			comment_idx = #{commentIdx}
+		<![CDATA[
+			UPDATE 
+				comment
+			SET
+				deleted_yn = 'Y'
+			WHERE
+				comment_idx = #{commentIdx}
+		]]>
 	</update>
-	
 </mapper>

@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="/fragments/common :: head">
 </head>
-<body th:with="currentPage = (${#httpServletRequest.getParameter('currentPage')} != null) ? ${#httpServletRequest.getParameter('currentPage')} : 0" >
+<body >
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"
 		th:replace="/fragments/common :: menu"></nav>
 
-	<div class="container" th:if="!${#strings.contains(#httpServletRequest.requestURI,'creator')}">
+	<div class="container">
 		
 		<h2>list</h2>
 		
@@ -36,14 +36,5 @@
 	</div>
 	
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-		crossorigin="anonymous"></script>
-	<script>
-		window.jQuery
-				|| document
-						.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')
-	</script>
-	
-	<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+	<script th:src="@{/assets/dist/js/bootstrap.bundle.min.js}"></script>
 </html>
