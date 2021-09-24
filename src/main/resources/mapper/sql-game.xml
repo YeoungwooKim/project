@@ -48,4 +48,31 @@
 				idx = #{idx}
 		]]>
 	</update>
+	<select id="isValid" parameterType="int" resultType="boolean">
+		SELECT
+			IF(count(idx)=1, 1, 0)
+	    FROM
+	    	game
+	    WHERE 
+	    	idx = #{idx}
+	</select>
+	<select id="makeRank" parameterType="int" resultType="project.project.dto.RankingDto">
+		SELECT
+			g.idx AS 'game_idx', g.game_title, g.played_cnt,
+			r.user_id, r.score, r.saved_time
+		FROM 
+			game g, ranking r
+		WHERE 
+			g.idx = r.game_idx
+			AND 
+			g.idx = #{idx}
+		ORDER BY r.score desc
+	</select>
+	<select id="getTitles" resultType="HashMap">
+		SELECT 
+			DISTINCT idx, game_title, played_cnt
+		FROM 
+			game
+	</select>
+	
 </mapper>

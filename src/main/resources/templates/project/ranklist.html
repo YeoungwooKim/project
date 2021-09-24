@@ -7,39 +7,71 @@
 <body>
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="/fragments/common :: menu"></nav>
 
-	<div class="container">
+	<div class="container w-50">
 
-		<h2>Rank</h2>
+		<h1 class="mt-3 mb-5 text-center">Ranking</h1>
+		
+		<th:block th:if="${list} != null AND ${titles} != null">
+			<div>
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+					<th:block th:each="title : ${titles}">
+						<th:block th:with="parr=${#httpServletRequest.requestURI}">
+							<th:block th:with="arr = ${#strings.arraySplit(parr, '/')}">
+								<th:block>
+									<li class="nav-item" role="presentation">
+										<a class="nav-link " th:id="|${title.game_title}-tab|" data-toggle="tab"
+											th:href="@{/rank/{idx}(idx=${title.idx})}" role="tab"
+											th:aria-controls="${title.game_title}"
+											th:aria-selected="${title.idx}== ${arr[1]} ? 'true' : 'false' " name="links"
+											th:classappend="${title.idx}==${arr[1]} ? 'active' "
+											th:text="${title.game_title}"></a>
+									</li>
+								</th:block>
+							</th:block>
+						</th:block>
+					</th:block>
+				</ul>
+				<div class="tab-content" id="myTabContent">
+					<h3 class="mt-2 text-right text-muted" th:text="|Total played :  ${list[0].playedCnt}|"></h3>
+					<th:block th:each="title, idx : ${titles}">
+						<div class="tab-pane fade" th:id="|${title.game_title}|" role="tabpanel"
+							th:classappend="${idx.index}==0 ? 'show active' "
+							th:aria-labelledby="|${title.game_title}-tab|">
 
-		<div>
-			<ul class="nav nav-tabs" id="myTab" role="tablist">
-				<li class="nav-item" role="presentation">
-					<a class="nav-link active" id="home-tab" 
-						data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"
-						onclick="searchRank(thymeleafObjName)">Home</a>
-				</li>
-				<li class="nav-item" role="presentation">
-					<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"
-						onclick="searchRank(thymeleafObjName)">Profile</a>
-				</li>
-			</ul>
-			<div class="tab-content" id="myTabContent">
-				<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab"> i am home</div>
-				<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">i am profile</div>
+							<div>
+								<th:block th:each="list, idx : ${list}">
+									<div class="card bg-light mb-3 mt-3" style="max-width: 18rem;">
+										<div class="card-header"> 
+											<strong th:text="${idx.index}+1"> </strong>
+										</div>
+										<div class="card-body">
+											<h5 class="card-title" th:text="|Score : ${list.score}|"> </h5>
+											<p class="card-text" th:text="|User : ${list.userId}|"> </p>
+											<p class="card-text" th:text="${list.savedTime}"> </p>
+										</div>
+									</div>
+								</th:block>
+							</div>
+						
+						</div>
+					</th:block>
+
+				</div>
 			</div>
-		</div>
+		</th:block>
 	</div>
+
+	<hr class="mt-4 w-75">
+
 	<script>
-		//처음 로딩시에 active되있는 게임만 
-		//결과를 받아오고
-		//다른게 클릭되면 서버에 조회해서
-		//ajax로 받아오면 될거같음.
-		function searchRank(){
-
+		var links = document.querySelectorAll('a[name="links"]');
+		for (var i = 0; i < links.length; i++) {
+			links[i].addEventListener("click", function (e) {
+				window.location.href = e.target.href;
+			});
 		}
-
 	</script>
-	
+	<link th:href="@{/css/rankStyle.css}" rel="stylesheet">
 	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<script th:src="@{/assets/dist/js/bootstrap.bundle.min.js}"></script>
 

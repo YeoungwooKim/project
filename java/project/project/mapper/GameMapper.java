@@ -1,5 +1,6 @@
 package project.project.mapper;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -17,4 +18,12 @@ public interface GameMapper {
 	void saveRank(RankingDto rank) throws Exception;
 	
 	void hitCnt(int idx) throws Exception;
+
+	List<RankingDto> makeRank(int idx) throws Exception;
+
+	boolean isValid(int idx) throws Exception;
+
+	List<HashMap<Integer, String>> getTitles() throws Exception;
+
+
 }

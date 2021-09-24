@@ -1,6 +1,8 @@
 package project.project.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,12 +11,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import project.project.dto.GameDto;
 import project.project.dto.RankingDto;
@@ -36,18 +38,34 @@ public class GameController {
 
 		return mv;
 	}
-	
-	@GetMapping("/rank")
-	public ModelAndView rankList() throws Exception {
+
+	@GetMapping("/rank/{idx}")
+	public ModelAndView rankList(@PathVariable int idx) throws Exception {
 		ModelAndView mv = new ModelAndView("/project/ranklist");
 		mv.addObject("title", "Rank");
-		List<GameDto> list = gameService.showList();
+		if(gameService.isValid(idx) != true) {
+			idx=1;
+		}
+		List<HashMap<Integer, String>> titles = gameService.getTitles();
+		//[{played_cnt=3, game_title=brick, idx=1}, {played_cnt=2, game_title=tetris, idx=4}]
+		mv.addObject("titles", titles);
+
+		List<RankingDto> list = gameService.makeRank(idx);
 		mv.addObject("list", list);
 
 		return mv;
 	}
-	
-	
+
+	@ExceptionHandler(NumberFormatException.class)
+	public String handleTypeMismatchException() {
+		return "redirect:/rank/1";
+	}
+
+	@GetMapping("/rank")
+	public String catchUrl() throws Exception {
+		return "redirect:/rank/1";
+	}
+
 	@GetMapping("/games/{idx}")
 	public ModelAndView gameDetail(@PathVariable int idx) throws Exception {
 		ModelAndView mv = new ModelAndView();
@@ -65,7 +83,6 @@ public class GameController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 		rank.setUserId(user.getUsername());
-		
 
 		gameService.hitCnt(idx);
 		gameService.saveRank(rank);

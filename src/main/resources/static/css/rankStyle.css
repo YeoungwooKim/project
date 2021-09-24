@@ -1,0 +1,17 @@
+.card {
+    margin: 0 auto;
+    float: none;
+    margin-bottom: 10px;
+}
+.card:first-child { 
+    border: 2px solid rgb(245, 225, 111);
+}
+.card:nth-child(2){
+    border: 2px solid rgb(156, 154, 154);
+}
+.card:nth-child(3){
+    border: 2px solid rgb(112, 65, 7);
+}
+.card:hover { 
+    border: 3px solid rgb(158, 219, 158);
+}
