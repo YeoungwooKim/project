@@ -1,44 +1,79 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="">
 	<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
 	<meta name="generator" content="Jekyll v4.1.1">
+
+	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}" />
+
 	<title>Signin Template · Bootstrap</title>
-	
+
 	<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/sign-in/">
-	
+
 	<!-- Bootstrap core CSS -->
 	<link th:href="@{/assets/dist/css/bootstrap.min.css}" rel="stylesheet">
-	
+
 	<!-- Custom styles for this template -->
 	<link th:href="@{/css/signin.css}" rel="stylesheet">
 </head>
+
 <body class="text-center">
 	<form class="form-signin" th:action="@{/login}" method="post">
 		<img class="mb-4" th:src="@{/assets/brand/bootstrap-solid.svg}" alt="" width="72" height="72">
 		<h1 class="h3 mb-3 font-weight-normal">Log-in</h1>
 		<div th:if="${param.error}" class="alert alert-danger" role="alert">
-        	Invalid username and password.
-    	</div>
-    	<div th:if="${param.logout}" class="alert alert-warning" role="alert">
-        	You have been logged out.
-    	</div>
-		<label for="username" class="sr-only">User ID</label> 
-			<input type="text" id="username" name="username" class="form-control" placeholder="User ID" required autofocus> 
-		<label for="userPw" class="sr-only">User Password</label> 
-			<input type="password" id="password" name="password" class="form-control" placeholder="User Password" required>
-		<div class="checkbox mb-3">
-			<label> 
-				<input type="checkbox" value="remember-me">
-				Remember me
-			</label>
+			Invalid username and password.
+		</div>
+		<div th:if="${param.logout}" class="alert alert-warning" role="alert">
+			You have been logged out.
+		</div>
+		<label for="username" class="sr-only">User ID</label>
+		<input type="text" id="username" name="username" class="form-control" placeholder="User ID" required autofocus>
+		<label for="userPw" class="sr-only">User Password</label>
+		<input type="password" id="password" name="password" class="form-control mt-2" placeholder="User Password"
+			required>
+		<div class="mb-3">
+			<a class="text-info" onclick="getEmail()">Forget password ? </a>
 		</div>
 		<a th:href="@{/register}" class="btn btn-lg btn-warning text-light">Register </a>
 		<button class="btn btn-lg btn-primary " type="submit">Log-in</button>
 		<p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
 	</form>
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script>
+		function getEmail() {
+			var email = prompt("write your email", "your_email_id@gmail.com");
+			emailChk(email);
+		}
+
+		function emailChk(email) {
+			var user = {
+				userEmail: email
+			};
+			if (String(email).length < 5) {
+				alert("check your email")
+			} else {
+				console.log(user);
+				$.ajax({
+					url: "/emailCheck",
+					data: user,
+					type: "post",
+					beforeSend: function (jqXHR, settings) {
+						var header = $("meta[name='_csrf_header']").attr("content");
+						var token = $("meta[name='_csrf']").attr("content");
+						jqXHR.setRequestHeader(header, token);
+					}
+				}).done(function (res) {
+					alert(res);
+				})
+			}
+		}
+	</script>
 </body>
+
 </html>

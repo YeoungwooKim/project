@@ -8,10 +8,22 @@ spring:
       connection-test-query: SELECT 1
   thymeleaf:
     cache: false
-  web:  
+  web:
     resources:
       cache:
         period: 0
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: wooyastdy@gmail.com
+    password: lvewqpahukhqahyg
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
 
 mybatis:
   configuration:
@@ -22,4 +34,13 @@ mybatis:
 #    org:
 #      springframework:
 #        security: DEBUG
+#spring.mail.host=smtp.gmail.com
+#spring.mail.port=587
+#spring.mail.username= ~~~@gmail.com // gmail 계정
+#spring.mail.password=qcyuiqxjmjtgosqh // 앱 비밀번호
+#spring.mail.properties.mail.smtp.auth=true
+#spring.mail.properties.mail.smtp.timeout=5000
+#spring.mail.properties.mail.smtp.starttls.enable=true
+# lvewqpahukhqahyg
+
        
