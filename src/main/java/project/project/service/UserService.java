@@ -36,5 +36,8 @@ public interface UserService {
 
 	void changePassword(String userEmail, String generatedPass) throws Exception;
 
+	boolean chechkEmailValidation(String userEmail) throws Exception;
+
+	void addEmailValidationCnt(String userEmail) throws Exception;
 
 }

@@ -42,6 +42,7 @@
 	</select>
 	
 	<update id="editInfo">
+	<![CDATA[
 		UPDATE 
 			user
 		SET 
@@ -49,14 +50,17 @@
 			user_pw = #{user.userPw}
 		WHERE
 			user_id = #{username}
+	 	]]>
 	</update>
 	<update id="editEmail">
+	<![CDATA[
 		UPDATE 
 			user
 		SET 
 			user_email = #{userEmail}
 		WHERE
 			user_id = #{username}
+	 	]]>
 	</update>
 	
 	<select id="searchMailBox" resultType="project.project.dto.MessageDto">
@@ -85,6 +89,7 @@
 	</select>
 	
 	<select id="getMsgCount" resultType="int">
+	<![CDATA[
 		SELECT
 			count(*) 
 		FROM (
@@ -97,8 +102,10 @@
 				AND
 				deleted_yn = 'N'
 				) msg;
+	 	]]>
 	</select>
 	<select id="findMyBoard" resultType="project.project.dto.BoardDto">
+	<![CDATA[
 		SELECT
 				board_idx,
 				title,
@@ -114,16 +121,20 @@
 				AND
 				creator_id = #{username}
 			ORDER BY board_idx DESC
+	 	]]>
 	</select>
 	<update id="checkMessage">
+	<![CDATA[
 		UPDATE 
 			message 
 		SET 
 			is_read = 1
 		WHERE
 			idx = #{idx}
+	 	]]>
 	</update>
 	<select id="searchBySenderAndIdx" resultType="project.project.dto.MessageDto">
+	<![CDATA[
 		SELECT
 			idx, sender, recipient, title, content, post_date
 		FROM
@@ -134,16 +145,20 @@
 			recipient = #{recipient}
 			AND
 			deleted_yn = 'N'
+	 	]]>
 	</select>
 	
 	<insert id="postMessage">
+	<![CDATA[
 		INSERT 
 			INTO message(sender, recipient, title, content, post_date)
 		VALUES
 			(#{username}, #{msg.recipient}, #{msg.title}, #{msg.content}, now())
+	 	]]>
 	</insert>
 	
 	<update id="deleteMsg">
+	<![CDATA[
 		UPDATE message
 		SET 
 			deleted_yn = 'Y'
@@ -151,29 +166,52 @@
 			idx = #{idx}
 			AND
 			recipient = #{username}
+	 	]]>
 	</update>
 	
 	<select id="isValid" parameterType="string" resultType="boolean">
+	<![CDATA[
 		SELECT 
 			IF(count(user_email)=1, 1, 0)
 	    FROM
 	    	user
 	    WHERE 
 	    	user_email = #{email}
+	 	]]>
 	</select>
 
 	<update id="changePassword">
+	<![CDATA[
 		UPDATE
 			user
 		SET
 			user_pw = #{pass}
 		WHERE
 			user_email = #{email}
+	 	]]>
 	</update>
 	
-	
-	
-	
+	<select id="chechkEmailValidation" parameterType="string" resultType="boolean">
+	<![CDATA[
+		SELECT
+			IF(email_validation_cnt > 3, 0, 1)
+		FROM
+			user
+		WHERE
+			user_email = #{userEmail}
+	 	]]>
+	</select>
+
+	<update id="addEmailValidationCnt" parameterType="string">
+	<![CDATA[
+		UPDATE 
+			user
+		SET
+			email_validation_cnt = email_validation_cnt + 1
+		WHERE
+			user_email = #{userEmail}
+	 	]]>
+	</update>
 	
 	
 	

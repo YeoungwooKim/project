@@ -17,7 +17,7 @@ public class MailService {
 	@Autowired
 	private JavaMailSender mailSender;	
     private static String FROM_ADDRESS = "wooyastdy@gmail.com";
-    //hi i am changed value
+    
     public boolean mailSend(MailDto mail) {
     	SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mail.getAddress());

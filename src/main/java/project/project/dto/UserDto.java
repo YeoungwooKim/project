@@ -1,7 +1,5 @@
 package project.project.dto;
 
-import java.util.List;
-
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
@@ -15,4 +13,5 @@ public class UserDto {
 	@NotNull
 	private String userEmail;
 	private int enabled;
+	private int emailValidationCnt;
 }

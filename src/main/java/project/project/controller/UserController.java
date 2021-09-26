@@ -30,7 +30,7 @@ import project.project.service.UserService;
 
 @Controller
 public class UserController {
-	
+
 	Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
@@ -79,18 +79,21 @@ public class UserController {
 		ModelAndView mv = new ModelAndView("project/register");
 		if (user.getUserEmail().length() > 5) {
 			if (userService.isValid(user.getUserEmail())) {
-				log.debug("exist!!  " + user.getUserEmail());
-				MailDto mail = new MailDto(user.getUserEmail());
-				
-				if (mailService.mailSend(mail)) { // 메일 보내기 성공.
-					userService.changePassword(user.getUserEmail(), mail.getGeneratedPass());
-					return "i send mail to you. check your emails";
-				} else { // 메일보내기 실패
-					return "error";
+				if (userService.chechkEmailValidation(user.getUserEmail())) {
+					MailDto mail = new MailDto(user.getUserEmail());
+
+					if (mailService.mailSend(mail)) { // 메일 보내기 성공.
+						userService.changePassword(user.getUserEmail(), mail.getGeneratedPass());
+						userService.addEmailValidationCnt(user.getUserEmail());
+						return "i send mail to you. check your emails";
+					} else { // 메일보내기 실패
+						return "error";
+					}
+				} else {
+					return "일일 인증횟수 초과!!";
 				}
 			}
 		}
-
 		return "invalid email !";
 	}
 

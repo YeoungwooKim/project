@@ -40,4 +40,9 @@ public interface UserMapper {
 	boolean isValid(String email) throws Exception;
 
 	void changePassword(@Param("email") String userEmail, @Param("pass") String generatedPass) throws Exception;
+
+	boolean chechkEmailValidation(String userEmail) throws Exception;
+
+	void addEmailValidationCnt(String userEmail) throws Exception;
+
 }

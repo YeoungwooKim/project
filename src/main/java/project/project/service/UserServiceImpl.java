@@ -100,4 +100,14 @@ public class UserServiceImpl implements UserService {
 		userMapper.changePassword(userEmail, passwordEncoder.encode(generatedPass));
 	}
 
+	@Override
+	public boolean chechkEmailValidation(String userEmail) throws Exception {
+		return userMapper.chechkEmailValidation(userEmail);
+	}
+
+	@Override
+	public void addEmailValidationCnt(String userEmail) throws Exception {
+		userMapper.addEmailValidationCnt(userEmail);
+	}
+
 }
