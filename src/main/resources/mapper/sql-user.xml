@@ -213,6 +213,43 @@
 	 	]]>
 	</update>
 	
-	
-	
+	<update id="disableCnt" parameterType="project.project.dto.UserDto">
+		<![CDATA[
+			UPDATE 
+				user
+			SET
+				disable_cnt = disable_cnt + 1
+			WHERE
+				user_id = #{userId}		
+		]]>
+	</update>
+	<select id="checkDisableCnt" parameterType="project.project.dto.UserDto" resultType="boolean">
+		<![CDATA[
+			SELECT
+				IF(disable_cnt > 3, 1, 0)
+			FROM
+				user
+			WHERE
+				user_id = #{userId}	
+		]]>
+	</select>
+	<update id="disable" parameterType="project.project.dto.UserDto">
+		<![CDATA[
+			UPDATE 
+				user
+			SET
+				enabled = 0,
+				disabled_date = NOW()
+			WHERE
+				user_id = #{userId}		
+		]]>
+	</update>
+	<select id="isDisabled" parameterType="project.project.dto.UserDto"  resultType="boolean">
+		SELECT
+			IF(enabled = 0, 1, 0)
+		FROM
+			user
+		WHERE
+			user_id = #{userId}
+	</select>
 </mapper>

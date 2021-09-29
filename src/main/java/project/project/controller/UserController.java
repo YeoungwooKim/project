@@ -7,9 +7,13 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -159,6 +163,20 @@ public class UserController {
 	public ModelAndView login() throws Exception {
 		ModelAndView mv = new ModelAndView("project/login");
 		return mv;
+	}
+
+	@PostMapping("/isValidUser")
+	public @ResponseBody String isValidUser(UserDto user) throws Exception {
+		Boolean tf = userService.isDisabled(user);
+		log.debug(tf + " hello ");
+		if (tf != null) {
+			if (tf == true) {
+				return "disabled id";
+			} else if (tf == false) {
+				return "";
+			}
+		}
+		return "없는 아이디";
 	}
 
 	@GetMapping("/logout")

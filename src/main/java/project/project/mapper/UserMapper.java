@@ -45,4 +45,12 @@ public interface UserMapper {
 
 	void addEmailValidationCnt(String userEmail) throws Exception;
 
+	void disableCnt(UserDto user) throws Exception;
+
+	boolean checkDisableCnt(UserDto user) throws Exception;
+
+	void disable(UserDto user) throws Exception;
+
+	boolean isDisabled(UserDto user) throws Exception;
+
 }

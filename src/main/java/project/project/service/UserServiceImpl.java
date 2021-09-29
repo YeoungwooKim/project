@@ -110,4 +110,24 @@ public class UserServiceImpl implements UserService {
 		userMapper.addEmailValidationCnt(userEmail);
 	}
 
+	@Override
+	public void disableCnt(UserDto user) throws Exception {
+		userMapper.disableCnt(user);
+	}
+
+	@Override
+	public boolean checkDisableCnt(UserDto user) throws Exception {
+		return userMapper.checkDisableCnt(user);
+	}
+
+	@Override
+	public void disable(UserDto user) throws Exception {
+		userMapper.disable(user);
+	}
+
+	@Override
+	public boolean isDisabled(UserDto user) throws Exception {
+		return userMapper.isDisabled(user);
+	}
+
 }

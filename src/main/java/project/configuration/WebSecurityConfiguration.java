@@ -13,11 +13,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-
+	
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
@@ -29,7 +30,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.and()
 			.anonymous().and()
 			.authorizeRequests()
-			.antMatchers("/idCheck", "/emailCheck").permitAll()
+			.antMatchers("/idCheck", "/emailCheck", "/isValidUser").permitAll()
 			.and()
 			.authorizeRequests()
 				.antMatchers("/test", "/", "/register", "/css/**", "/assets/**", "/js/**").permitAll()				
@@ -37,6 +38,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.and()
 			.formLogin()
 				.loginPage("/login")
+				.failureHandler(failureHandler())
 				.permitAll()
 				.and()
 			.logout()
@@ -57,4 +59,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder() {
 	    return new BCryptPasswordEncoder();
 	}
+	
+	@Bean
+	public AuthenticationFailureHandler failureHandler() {
+		return new CustomAuthFailureHandler();
+	}
+	
 }
