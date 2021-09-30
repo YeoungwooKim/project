@@ -1,0 +1,33 @@
+#event scheduler on/off 확인
+show variables like '%event%';
+
+#event scheduler on
+set global event_scheduler = 1;
+
+#event 1
+CREATE EVENT emailAuthReset 
+    ON SCHEDULE
+           EVERY 1 day starts '2021-09-26 00:00:00'
+    	   COMMENT '이메일 인증횟수 초기화'
+    DO
+    UPDATE board.user
+    	SET email_validation_cnt = 0
+    	WHERE email_validation_cnt > 0; 
+END
+
+#event 2
+CREATE EVENT accountLockReset 
+    ON SCHEDULE
+           EVERY 1 day starts '2021-09-26 00:00:00'
+    	   COMMENT '계정 잠금 초기화'
+    DO
+    UPDATE board.user
+	SET disabled_date = null,
+		enabled = 1,
+		disable_cnt = 0
+	WHERE TIMESTAMPDIFF(day, disabled_date, now()) >= 3;
+END
+
+show EVENTS;
+#drop EVENT emailAuthReset;
+#drop EVENT accountLockReset 
