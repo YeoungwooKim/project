@@ -14,4 +14,5 @@ public class UserDto {
 	private String userEmail;
 	private int enabled;
 	private int emailValidationCnt;
+	private String disabledDate;
 }

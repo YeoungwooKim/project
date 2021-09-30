@@ -1,5 +1,10 @@
 package project.project.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -7,13 +12,9 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -167,16 +168,24 @@ public class UserController {
 
 	@PostMapping("/isValidUser")
 	public @ResponseBody String isValidUser(UserDto user) throws Exception {
-		Boolean tf = userService.isDisabled(user);
-		log.debug(tf + " hello ");
-		if (tf != null) {
-			if (tf == true) {
-				return "disabled id";
-			} else if (tf == false) {
-				return "";
-			}
+		String msg = "";
+		if (userService.isDisabled(user).equals("비활성화상태")) {
+			user = userService.getUser(user);
+			if(user.getEmailValidationCnt() > 3)
+				msg += " 이메일 인증 횟수 초과 \n";
+			if(user.getEnabled() == 0) 
+				msg += " 로그인 실패 횟수 초과.\n";
+			msg += " 계정 잠금 시작 시간 : " + user.getDisabledDate() + "\n";
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date disabledDate = transFormat.parse(user.getDisabledDate());
+	        cal.setTime(disabledDate);
+	        DateFormat df = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+	        cal.add(Calendar.DATE, +3);
+			msg += " 계정 잠금 해제 예정 시간 : " + df.format(cal.getTime()) + "\n";
+			// 이벤트 스케쥴러에 현재 날짜와 disable날짜와 날짜 차이계산. 3일 차이날 경우 해제. [완료]
 		}
-		return "없는 아이디";
+		return msg;
 	}
 
 	@GetMapping("/logout")

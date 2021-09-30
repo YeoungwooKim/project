@@ -51,6 +51,10 @@ public interface UserMapper {
 
 	void disable(UserDto user) throws Exception;
 
-	boolean isDisabled(UserDto user) throws Exception;
+	String isDisabled(UserDto user) throws Exception;
+
+	String getEmail(String userEmail) throws Exception;
+
+	UserDto getUser(UserDto user) throws Exception;
 
 }

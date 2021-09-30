@@ -244,12 +244,37 @@
 				user_id = #{userId}		
 		]]>
 	</update>
-	<select id="isDisabled" parameterType="project.project.dto.UserDto"  resultType="boolean">
-		SELECT
-			IF(enabled = 0, 1, 0)
-		FROM
-			user
-		WHERE
-			user_id = #{userId}
+	<select id="isDisabled" parameterType="project.project.dto.UserDto"  resultType="string">
+		SELECT IF(
+			NOT EXISTS(
+				SELECT 
+					enabled
+				FROM 
+					user
+				WHERE 
+					user_id = #{userId}
+				), 
+				'존재안함', IF((
+						SELECT 
+							enabled
+						FROM 
+							user
+						WHERE 
+							user_id = #{userId} ) = 0
+						, '비활성화상태', '활성화상태')
+				) as tf
+		FROM user
+		limit 1;
+	</select>
+
+	<select id="getUser" parameterType="project.project.dto.UserDto" resultType="project.project.dto.UserDto">
+		<![CDATA[
+			SELECT 
+				user_id, user_email, enabled, email_validation_cnt, disable_cnt, disabled_date
+			FROM
+				user
+			WHERE 
+				user_id = #{userId}
+		]]>
 	</select>
 </mapper>

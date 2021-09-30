@@ -46,6 +46,8 @@ public interface UserService {
 
 	void disable(UserDto user) throws Exception;
 
-	boolean isDisabled(UserDto user) throws Exception;
+	String isDisabled(UserDto user) throws Exception;
+	
+	UserDto getUser(UserDto user) throws Exception;
 
 }

@@ -126,8 +126,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean isDisabled(UserDto user) throws Exception {
+	public String isDisabled(UserDto user) throws Exception {
 		return userMapper.isDisabled(user);
+	}
+
+	@Override
+	public UserDto getUser(UserDto user) throws Exception {
+		return userMapper.getUser(user);
 	}
 
 }
