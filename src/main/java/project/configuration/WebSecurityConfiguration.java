@@ -21,6 +21,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
+	
 	@Autowired
 	private DataSource dataSource;
 	

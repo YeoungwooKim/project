@@ -2,13 +2,20 @@ package project.project.dto;
 
 import java.util.Random;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+@ApiModel(value="MailDto : 메일 ", description="메일 내용")
 @Data
 public class MailDto {
+	@ApiModelProperty(value="주소")
 	private String address;
+	@ApiModelProperty(value="제목")
 	private String title;
+	@ApiModelProperty(value="내용")
 	private String message;
+	@ApiModelProperty(value="자동 생성 비밀번호")
 	private String generatedPass;
 	
 	public MailDto(String address) {
