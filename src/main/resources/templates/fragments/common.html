@@ -7,7 +7,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
 	<meta name="generator" content="Jekyll v4.1.1">
-	
+
 	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
 	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}" />
 	<title th:text="${title}"></title>
@@ -44,14 +44,24 @@
 					</a>
 				</li>
 				<li class="nav-item " th:classappend="${title}=='Games'? 'active'">
-					<a class="nav-link" href="/games"> Games <span class="sr-only" th:if="${title}=='Games'">(current)</span>
+					<a class="nav-link" href="/games"> Games <span class="sr-only"
+							th:if="${title}=='Games'">(current)</span>
 					</a>
 				</li>
 				<li class="nav-item " th:classappend="${title}=='Rank'? 'active'">
-					<a class="nav-link" href="/rank"> Rank <span class="sr-only" th:if="${title}=='Rank'">(current)</span>
+					<a class="nav-link" href="/rank"> Rank <span class="sr-only"
+							th:if="${title}=='Rank'">(current)</span>
 					</a>
 				</li>
+				<div sec:authorize="hasRole('ROLE_ADMIN')" class="text-light">
+					<li class="nav-item " th:classappend="${title}=='adminPage'? 'active'">
+						<a class="nav-link" href="/adminPage"> Admin_Page 
+							<span class="sr-only" th:if="${title}=='adminPage'">(current)</span>
+						</a>
+					</li>
+				</div>
 			</ul>
+
 			<div class="text-light">
 				Hello,
 				<span sec:authentication="name"></span>

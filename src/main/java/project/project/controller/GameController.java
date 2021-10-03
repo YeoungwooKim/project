@@ -28,6 +28,7 @@ public class GameController {
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	GameService gameService;
+	
 
 	@GetMapping("/games")
 	public ModelAndView gamelist() throws Exception {

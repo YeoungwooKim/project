@@ -277,4 +277,42 @@
 				user_id = #{userId}
 		]]>
 	</select>
+	
+	<select id="getUsers" resultType="project.project.dto.UserDto">
+		<![CDATA[
+			SELECT 
+				user_id, user_email, enabled, email_validation_cnt, disable_cnt, disabled_date
+			FROM
+				user
+		]]>
+	</select>
+	<update id="disableUsers" parameterType="java.util.List">
+		UPDATE 
+			user
+		SET
+			enabled = 0,
+			disabled_date = NOW()
+		WHERE
+		  user_id IN
+		    <foreach item="item" index="index" collection="list"
+		        open="(" separator="," close=")">
+		          #{item}
+		    </foreach>
+	</update>
+	<update id="enableUsers" parameterType="java.util.List">
+		UPDATE 
+			user
+		SET
+			enabled = 1,
+			email_validation_cnt = 0,
+			disable_cnt = 0,
+			disabled_date = null
+		WHERE
+		  user_id IN
+		    <foreach item="item" index="index" collection="list"
+		        open="(" separator="," close=")">
+		          #{item}
+		    </foreach>
+	</update>
+	
 </mapper>

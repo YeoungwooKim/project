@@ -135,4 +135,19 @@ public class UserServiceImpl implements UserService {
 		return userMapper.getUser(user);
 	}
 
+	@Override
+	public List<UserDto> getUsers() throws Exception {
+		return userMapper.getUsers();
+	}
+
+	@Override
+	public void disableUsers(List<String> userList) throws Exception {
+		userMapper.disableUsers(userList);
+	}
+
+	@Override
+	public void enableUsers(List<String> userList) throws Exception {
+		userMapper.enableUsers(userList);
+	}
+
 }

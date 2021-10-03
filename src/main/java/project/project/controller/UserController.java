@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -43,6 +46,27 @@ public class UserController {
 
 	@Autowired
 	private MailService mailService;
+
+	@GetMapping("/adminPage")
+	public ModelAndView showAdminPage() throws Exception {
+		ModelAndView mv = new ModelAndView("project/adminPage");
+		mv.addObject("title", "adminPage");
+		List<UserDto> list = userService.getUsers();
+		mv.addObject("users", list);
+		return mv;
+	}
+
+	@PostMapping("/disableUser")
+	public @ResponseBody String disableUsers(@RequestBody List<String> userList) throws Exception {
+		userService.disableUsers(userList);
+		return "";
+	}
+
+	@PostMapping("/enableUser")
+	public @ResponseBody String enableUsers(@RequestBody List<String> userList) throws Exception {
+		userService.enableUsers(userList);
+		return "";
+	}
 
 	@GetMapping("/myMessage")
 	public ModelAndView showAllMessage() throws Exception {
@@ -171,17 +195,17 @@ public class UserController {
 		String msg = "";
 		if (userService.isDisabled(user).equals("비활성화상태")) {
 			user = userService.getUser(user);
-			if(user.getEmailValidationCnt() > 3)
+			if (user.getEmailValidationCnt() > 3)
 				msg += " 이메일 인증 횟수 초과 \n";
-			if(user.getEnabled() == 0) 
+			if (user.getEnabled() == 0)
 				msg += " 로그인 실패 횟수 초과.\n";
 			msg += " 계정 잠금 시작 시간 : " + user.getDisabledDate() + "\n";
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date disabledDate = transFormat.parse(user.getDisabledDate());
-	        cal.setTime(disabledDate);
-	        DateFormat df = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
-	        cal.add(Calendar.DATE, +3);
+			cal.setTime(disabledDate);
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+			cal.add(Calendar.DATE, +3);
 			msg += " 계정 잠금 해제 예정 시간 : " + df.format(cal.getTime()) + "\n";
 			// 이벤트 스케쥴러에 현재 날짜와 disable날짜와 날짜 차이계산. 3일 차이날 경우 해제. [완료]
 		}

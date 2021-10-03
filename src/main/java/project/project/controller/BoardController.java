@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import io.micrometer.core.instrument.util.StringUtils;
 import project.project.dto.BoardDto;
-import project.project.dto.UserDto;
 import project.project.page.Pagination;
 import project.project.service.BoardService;
 import project.validator.BoardValidator;
@@ -40,8 +36,8 @@ public class BoardController {
 	private BoardValidator boardValidator;
 
 	@Autowired
-	private BoardService boardService;
-
+	private BoardService boardService;	
+	
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam(value = "currentPage", required = false) String currentPage)
 			throws Exception {
@@ -60,17 +56,15 @@ public class BoardController {
 
 		return mv;
 	}
-	
+
 	@GetMapping("/list/creator/{creator}")
 	public ModelAndView searchByCreator(@PathVariable("creator") String creatorId) throws Exception {
 		ModelAndView mv = new ModelAndView("project/list");
 		List<BoardDto> list = boardService.searchByCreator(creatorId);
 		mv.addObject("list", list);
-		mv.addObject("title","creator");
+		mv.addObject("title", "creator");
 		return mv;
 	}
-	
-	
 
 	@GetMapping("/write")
 	public ModelAndView write(HttpServletRequest request) throws Exception {
@@ -85,7 +79,7 @@ public class BoardController {
 			mv.addObject("board", new BoardDto());
 			mv.addObject("title", "write");
 		}
-		//log.debug(mv.getModelMap().toString());
+		// log.debug(mv.getModelMap().toString());
 		return mv;
 	}
 
@@ -103,7 +97,7 @@ public class BoardController {
 			throw new Exception(bindingResult.getAllErrors().toString());
 		} else {
 			if (board.getBoardIdx() > 0) { // 파라미터값이 존재, 게시글 수정
-				if(isEqualUser(boardService.findCreator(board.getBoardIdx()), user.getUsername())) {
+				if (isEqualUser(boardService.findCreator(board.getBoardIdx()), user.getUsername())) {
 					boardService.modifyBoardList(board, board.getBoardIdx());
 				} else if (isProperAuth(user.getAuthorities().toString())) {
 					boardService.modifyBoardList(board, board.getBoardIdx());
@@ -127,17 +121,17 @@ public class BoardController {
 		}
 		return "redirect:/board/list";
 	}
-	
+
 	public Boolean isEqualUser(String creatorId, String currentUser) {
-		if(creatorId.equals(currentUser)) {
+		if (creatorId.equals(currentUser)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	public Boolean isProperAuth(String currentAuth) {
-		if(currentAuth.equals("[ROLE_ADMIN]")) {
+		if (currentAuth.equals("[ROLE_ADMIN]")) {
 			return true;
 		} else {
 			return false;

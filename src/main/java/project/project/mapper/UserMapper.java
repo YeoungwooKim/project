@@ -19,10 +19,11 @@ public interface UserMapper {
 
 	void editInfo(@Param("username") String username, @Param("user") UserDto postedUserValue) throws Exception;
 
-	void editEmail(@Param("username") String username, @Param("userEmail")  String userEmail) throws Exception;
+	void editEmail(@Param("username") String username, @Param("userEmail") String userEmail) throws Exception;
 
-	List<MessageDto> searchMailBox(@Param("tf") boolean tf, @Param("username") String username, @Param("cnt") int cnt) throws Exception;
-	
+	List<MessageDto> searchMailBox(@Param("tf") boolean tf, @Param("username") String username, @Param("cnt") int cnt)
+			throws Exception;
+
 	int getMsgCount(String username) throws Exception;
 
 	List<BoardDto> findMyBoard(String username) throws Exception;
@@ -56,5 +57,11 @@ public interface UserMapper {
 	String getEmail(String userEmail) throws Exception;
 
 	UserDto getUser(UserDto user) throws Exception;
+
+	List<UserDto> getUsers() throws Exception;
+
+	void disableUsers(List<String> userList) throws Exception;
+
+	void enableUsers(List<String> userList) throws Exception;
 
 }

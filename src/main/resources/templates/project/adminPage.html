@@ -1,0 +1,112 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragments/common :: head">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="/fragments/common :: menu"></nav>
+
+    <div class="container">
+        <h2> ADMIN_PAGE</h2>
+        <div class="mt-3">
+            <h3> enabled user</h3>
+            <th:block th:each="list : ${users}">
+                <th:block th:if="${list.userId} != 'root' ">
+                    <th:block th:if="${list.enabled} == '1' ">
+                        <a th:href="@{|/board/list/creator/${list.userId}|}" th:text="${list.userId}"
+                            th:title="| ${list.userId} 의 모든 게시글 보기|"
+                            onClick="window.open(this.href, '', 'width=550, height=700');  return false;">
+                        </a>
+                        <input type="hidden" name="userId" th:value="${list.userId}">
+                        <div class="float-right">
+                            <input type="checkbox" name="disableChk" th:value="${list.userId}"> </input>
+
+                        </div>
+                        <hr>
+                    </th:block>
+                </th:block>
+            </th:block>
+            <div class="float-right">
+                <button type="button" name="disableSelect" onclick="selectAll('disableSelect')"
+                    class="btn btn-outline-success"> ALL </button>
+                <button type="button" onclick="send('disable')" class="btn btn-outline-danger"> disable </button>
+            </div>
+            <div class="my-5"></div>
+            <h3 class="mt-3"> disabled user</h3>
+            <th:block th:each="list : ${users}">
+                <th:block th:if="${list.userId} != 'root' ">
+                    <th:block th:if="${list.enabled} == '0' ">
+                        <a th:href="@{|/board/list/creator/${list.userId}|}" th:text="${list.userId}"
+                            th:title="| ${list.userId} 의 모든 게시글 보기|"
+                            onClick="window.open(this.href, '', 'width=550, height=700');  return false;">
+                        </a>
+                        <input type="hidden" name="userId" th:value="${list.userId}">
+                        <span
+                            th:text="| email_validation : ${list.emailValidationCnt}, login_failed : ${list.disableCnt}, |"></span>
+                        <span th:text="|   disabled_date : ${list.disabledDate} |"></span>
+                        <div class="float-right">
+                            <input type="checkbox" name="enableChk" th:value="${list.userId}"> </input>
+
+                        </div>
+                        <hr>
+                    </th:block>
+                </th:block>
+            </th:block>
+            <div class="float-right mb-5">
+                <button type="button" name="enableSelect" onclick="selectAll('enableSelect')"
+                    class="btn btn-outline-success"> ALL </button>
+                <button type="button" onclick="send('enable')" class="btn btn-outline-info"> enable </button>
+            </div>
+        </div>
+        <div class="my-5"></div>
+    </div>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+        function send(str) {
+            var userList = [];
+            if (str == 'disable') {
+                chkboxs = document.querySelectorAll('input[name="disableChk"]');
+            } else {
+                chkboxs = document.querySelectorAll('input[name="enableChk"]');
+            }
+            for (var chkbox of chkboxs) {
+                if (chkbox.checked) {
+                    userList.push(chkbox.value)
+                }
+            }
+            $.ajax({
+                url: (str == 'disable') ? "/disableUser" : "/enableUser",
+                data: JSON.stringify(userList),
+                contentType: 'application/json',
+                type: "post",
+                beforeSend: function (jqXHR, settings) {
+                    var header = $("meta[name='_csrf_header']").attr("content");
+                    var token = $("meta[name='_csrf']").attr("content");
+                    jqXHR.setRequestHeader(header, token);
+                }
+            }).done(function (res) {
+                console.log("success");
+                window.location.reload();
+            })
+        }
+
+        var tf = true;
+        function selectAll(str) {
+            var chkboxs = null;
+            if (str == 'disableSelect') {
+                chkboxs = document.querySelectorAll('input[name="disableChk"]');
+            } else {
+                chkboxs = document.querySelectorAll('input[name="enableChk"]');
+            }
+            for (var chkbox of chkboxs) {
+                chkbox.checked = tf
+            }
+            tf = !tf
+        }
+
+
+    </script>
+    <script th:src="@{/assets/dist/js/bootstrap.bundle.min.js}"></script>
+
+</html>
