@@ -31,3 +31,4 @@ END
 show EVENTS;
 #drop EVENT emailAuthReset;
 #drop EVENT accountLockReset 
+#SELECT event_schema, event_name, definer, starts, ends, status, last_executed, event_comment FROM information_schema.EVENTS;

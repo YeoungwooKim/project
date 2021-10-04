@@ -21,7 +21,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@PropertySource("classpath:/application.yml")
+//@PropertySource("classpath:/application.yml")
 public class DatabaseConfiguration {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());

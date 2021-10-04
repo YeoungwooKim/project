@@ -20,7 +20,6 @@
 	<logger name="jdbc.resultsettable" level="TRACE" appender-ref="console-infolog"/>
 	<logger name="org.springframework" level="error"/>
 	<logger name="org.springframework.jdbc" level="error"/>
-	
 	<!-- 루트 로거 -->
     <root level="error">
         <appender-ref ref="console"/>
