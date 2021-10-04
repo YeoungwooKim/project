@@ -2,6 +2,8 @@ package project.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -63,4 +65,9 @@ public class MvcConfiguration implements WebMvcConfigurer { // extends WebMvcCon
 				.additionalModels(typeResolver.resolve(RoleDto.class))
 				.additionalModels(typeResolver.resolve(UserDto.class));
 	}
+	
+//	@Bean
+//    public JavaMailSender javaMailSender() { 
+//          return new JavaMailSenderImpl();
+//    }
 }

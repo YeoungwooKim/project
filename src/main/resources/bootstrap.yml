@@ -1,0 +1,8 @@
+spring:
+  cloud:
+    config:
+      uri: http://3.37.71.155:8888 #/project-cloud-config/product
+      name: project-cloud-config
+logging:
+  config: classpath:logback-${spring.profiles.active}.xml    
+   
