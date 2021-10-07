@@ -16,6 +16,7 @@
 
 	<!-- 로거 -->
 	<logger name="project" level="ERROR" appender-ref="console"/>
+	<logger name="org.springframework" level="error"/>
 	<!-- 루트 로거 -->
     <root level="error">
         <appender-ref ref="console"/>
