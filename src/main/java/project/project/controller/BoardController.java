@@ -42,6 +42,7 @@ public class BoardController {
 	public ModelAndView list(@RequestParam(value = "currentPage", required = false) String currentPage)
 			throws Exception {
 		Pagination pagination = new Pagination(boardService.getTotalRecord());
+		log.debug(">>>>>>>>>>>>>>>>>auto_build test<<<<<<<<<<<<<<<<<<");
 		ModelAndView mv = new ModelAndView("project/list");
 		int currPage;
 		if (pagination.chkCurrentPage(currentPage)) {
