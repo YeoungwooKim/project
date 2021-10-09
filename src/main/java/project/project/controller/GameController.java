@@ -3,6 +3,7 @@ package project.project.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap.KeySetView;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,10 @@ public class GameController {
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	GameService gameService;
-	
+
+	HashMap<Integer, Boolean> rankIndex = new HashMap<Integer, Boolean>();
+
+	Integer fixedIdx = null;
 
 	@GetMapping("/games")
 	public ModelAndView gamelist() throws Exception {
@@ -44,11 +48,23 @@ public class GameController {
 	public ModelAndView rankList(@PathVariable int idx) throws Exception {
 		ModelAndView mv = new ModelAndView("/project/ranklist");
 		mv.addObject("title", "Rank");
-		if(gameService.isValid(idx) != true) {
-			idx=1;
+		List<HashMap<String, String>> titles = gameService.getTitles();
+
+		if (rankIndex == null || rankIndex.isEmpty()) {
+			List<Integer> rankIdx = gameService.getIdxes();
+			for (int i = 0; i < rankIdx.size(); i++) {
+				rankIndex.put(rankIdx.get(i), true);
+			}
 		}
-		List<HashMap<Integer, String>> titles = gameService.getTitles();
-		//[{played_cnt=3, game_title=brick, idx=1}, {played_cnt=2, game_title=tetris, idx=4}]
+
+		if (gameService.isValid(idx) != true) {
+			Set<Integer> keys = rankIndex.keySet();
+			for (Integer key : keys) {
+				idx = key;
+				break;
+			}
+			fixedIdx = idx;
+		}
 		mv.addObject("titles", titles);
 
 		List<RankingDto> list = gameService.makeRank(idx);
@@ -57,14 +73,36 @@ public class GameController {
 		return mv;
 	}
 
+	public void getFixedIdx() throws Exception {
+		if (rankIndex == null || rankIndex.isEmpty()) {
+			List<Integer> rankIdx = gameService.getIdxes();
+			for (int i = 0; i < rankIdx.size(); i++) {
+				rankIndex.put(rankIdx.get(i), true);
+				fixedIdx = rankIdx.get(i);
+			}			
+		} else {
+			Set<Integer> keys = rankIndex.keySet();
+			for(Integer key : keys) {
+				fixedIdx = key;
+				break;
+			}
+		}		
+	}
+
 	@ExceptionHandler(NumberFormatException.class)
-	public String handleTypeMismatchException() {
-		return "redirect:/rank/1";
+	public String handleTypeMismatchException() throws Exception {
+		if (fixedIdx == null) {
+			getFixedIdx();
+		}
+		return "redirect:/rank/" + fixedIdx;
 	}
 
 	@GetMapping("/rank")
 	public String catchUrl() throws Exception {
-		return "redirect:/rank/1";
+		if (fixedIdx == null) {
+			getFixedIdx();
+		}
+		return "redirect:/rank/" + fixedIdx;
 	}
 
 	@GetMapping("/games/{idx}")

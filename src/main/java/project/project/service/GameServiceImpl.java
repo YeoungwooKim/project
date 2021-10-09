@@ -2,6 +2,7 @@ package project.project.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,8 +48,13 @@ public class GameServiceImpl implements GameService {
 	}
 
 	@Override
-	public List<HashMap<Integer, String>> getTitles() throws Exception {
+	public List<HashMap<String, String>> getTitles() throws Exception {
 		return gameMapper.getTitles();
+	}
+
+	@Override
+	public List<Integer> getIdxes() throws Exception {
+		return gameMapper.getIdxes();
 	}
 
 

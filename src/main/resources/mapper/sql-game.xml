@@ -80,5 +80,13 @@
 			game
 	 	]]>
 	</select>
-	
+	<select id="getIdxes" resultType="int">
+		<![CDATA[
+			SELECT 
+				DISTINCT idx
+			FROM
+				game
+			ORDER BY idx ASC
+		]]>
+	</select>
 </mapper>

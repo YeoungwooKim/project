@@ -2,6 +2,7 @@ package project.project.mapper;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -23,7 +24,9 @@ public interface GameMapper {
 
 	boolean isValid(int idx) throws Exception;
 
-	List<HashMap<Integer, String>> getTitles() throws Exception;
+	List<HashMap<String, String>> getTitles() throws Exception;
+
+	List<Integer> getIdxes() throws Exception;
 
 
 }
