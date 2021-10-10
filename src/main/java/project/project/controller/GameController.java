@@ -30,7 +30,7 @@ public class GameController {
 	GameService gameService;
 
 	HashMap<Integer, Boolean> rankIndex = new HashMap<Integer, Boolean>();
-
+	//hello world!
 	Integer fixedIdx = null;
 
 	@GetMapping("/games")
