@@ -1,7 +1,7 @@
 #event scheduler on/off 확인
 show variables like '%event%';
 
-#event scheduler on
+#event scheduler on                  
 set global event_scheduler = 1;
 
 #event 1
