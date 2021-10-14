@@ -54,6 +54,7 @@ public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		response.sendRedirect("/login");
 	}
 
 }
